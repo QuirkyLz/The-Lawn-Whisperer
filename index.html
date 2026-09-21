@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>The Lawn Whisperer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Archivo+Expanded:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch:#0A1A0E; --pitch2:#112212; --paper:#0F2113;
+    --chalk:#F4F7EC; --chalk-dim:#8FA38A;
+    --lime:#C6FA3C; --lime-dim:#8FB52C; --ice:#7FE0E8; --hazard:#FF6A2A;
+    --line:#233A26; --line-bright:#2E4E33; --danger:#FF5D4E;
+    --radius:3px; font-family:"Archivo", system-ui, sans-serif;
+  }
+  html[data-scheme="black-orange"]{
+    --pitch:#0A0A0A; --pitch2:#171717; --paper:#141414;
+    --chalk:#F5F3EE; --chalk-dim:#9A968D;
+    --lime:#FF7A1A; --lime-dim:#CC5F10; --ice:#FFC98C; --hazard:#FFD23F;
+    --line:#262422; --line-bright:#3A3733; --danger:#FF5D4E;
+  }
+  html[data-scheme="charcoal-sky"]{
+    --pitch:#10161C; --pitch2:#182330; --paper:#141E28;
+    --chalk:#EEF3F7; --chalk-dim:#8FA2B3;
+    --lime:#5FD4E8; --lime-dim:#3FAEC2; --ice:#8FE0C8; --hazard:#FF9B4A;
+    --line:#223142; --line-bright:#2E4258; --danger:#FF6F61;
+  }
+  html[data-scheme="forest-gold"]{
+    --pitch:#0E1A0C; --pitch2:#16240F; --paper:#131F0E;
+    --chalk:#F6F4E9; --chalk-dim:#A3AE8D;
+    --lime:#E8B44C; --lime-dim:#C4952F; --ice:#9ED2B0; --hazard:#FF8A3D;
+    --line:#243318; --line-bright:#324521; --danger:#FF6357;
+  }
+  html[data-scheme="clay-cream"]{
+    --pitch:#FBF6ED; --pitch2:#F2E9D8; --paper:#FFFFFF;
+    --chalk:#2E2418; --chalk-dim:#8A7A63;
+    --lime:#B5622A; --lime-dim:#8F4B1F; --ice:#3F8E8A; --hazard:#C4432A;
+    --line:#E5D9C3; --line-bright:#D6C4A2; --danger:#B5342A;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0; background:var(--pitch); color:var(--chalk);
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+    -webkit-font-smoothing:antialiased;
+    background-image: radial-gradient(circle at 85% -10%, color-mix(in srgb, var(--lime) 10%, transparent), transparent 45%);
+  }
+  h1,h2,h3{font-family:"Archivo Expanded","Archivo",sans-serif; text-transform:uppercase; letter-spacing:0.2px;}
+  .display{font-family:"Anton", "Archivo Expanded", sans-serif; text-transform:uppercase; letter-spacing:0.5px;}
+  a{color:inherit;}
+  .wrap{max-width:640px; margin:0 auto; padding:0 18px 90px;}
+  header.top{position:sticky; top:0; z-index:20; padding-top:calc(12px + env(safe-area-inset-top,0px)); background:linear-gradient(var(--pitch) 82%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  .brand{display:flex; align-items:center; gap:10px; max-width:640px; margin:0 auto; padding:0 18px 12px;}
+  .brand .logo{flex:0 0 auto; display:block;}
+  .brand h1{font-size:18px; font-weight:800; margin:0; letter-spacing:0.8px;}
+  .segment{display:flex; max-width:640px; margin:0 auto; padding:0 18px 12px; gap:0;}
+  .segbtn{flex:1; text-align:center; padding:10px 1px; font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.1px; background:var(--pitch2); color:var(--chalk-dim); border:1px solid var(--line-bright);}
+  .segbtn:not(:last-child){border-right:none;}
+  .segbtn.active{background:var(--lime); color:var(--pitch); border-color:var(--lime);}
+  .hero{padding:26px 0 4px; position:relative;}
+  .hero .eyebrow{font-size:11.5px; color:var(--lime); font-weight:800; letter-spacing:1.4px; text-transform:uppercase;}
+  .hero h2.display{font-size:40px; line-height:0.98; margin:10px 0 12px;}
+  .hero p{color:var(--chalk-dim); margin:0 0 4px; font-size:15px; line-height:1.55; max-width:44ch;}
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:18px; margin:14px 0;}
+  section.block{margin:34px 0;}
+  section.block > h3{font-size:20px; margin:0 0 4px; font-weight:800; display:flex; align-items:center; gap:10px;}
+  section.block > h3::after{content:""; flex:1; height:2px; background:var(--line-bright);}
+  section.block > .sub{color:var(--chalk-dim); font-size:13.5px; margin:6px 0 14px;}
+  label.field{display:block; font-size:11.5px; font-weight:800; color:var(--lime); margin:14px 0 6px; text-transform:uppercase; letter-spacing:0.7px;}
+  label.field:first-child{margin-top:0;}
+  input[type=date], input[type=number], input[type=text], input[type=url], select{
+    width:100%; padding:12px 12px; border-radius:var(--radius); border:1.4px solid var(--line-bright);
+    background:var(--pitch2); color:var(--chalk); font-size:15px; font-family:inherit; font-weight:600;
+  }
+  select{appearance:none; -webkit-appearance:none;
+    background-image:linear-gradient(45deg, transparent 50%, var(--lime) 50%), linear-gradient(135deg, var(--lime) 50%, transparent 50%);
+    background-position: calc(100% - 18px) center, calc(100% - 13px) center; background-size:5px 5px; background-repeat:no-repeat;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .row3{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:10px;}
+  @media (max-width:420px){.row2{grid-template-columns:1fr;} .row3{grid-template-columns:1fr;}}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:14px 18px; border-radius:var(--radius); font-size:13.5px; font-weight:800; background:var(--lime); color:var(--pitch); width:100%; margin-top:16px; text-transform:uppercase; letter-spacing:0.7px;}
+  .btn:active{background:var(--lime-dim);}
+  .btn.ghost{background:transparent; color:var(--lime); border:1.6px solid var(--lime); width:auto; margin-top:0; padding:10px 16px;}
+  .btn.small{width:auto; padding:9px 15px; font-size:12px; margin-top:0;}
+  .setup-summary{display:flex; align-items:center; gap:16px; position:relative;}
+  .numwrap{position:relative; flex:0 0 auto; padding:6px 14px;}
+  .numwrap::before,.numwrap::after,.numwrap .bl,.numwrap .br{content:""; position:absolute; width:10px; height:10px; border-color:var(--lime); border-style:solid;}
+  .numwrap::before{top:0; left:0; border-width:2px 0 0 2px;}
+  .numwrap::after{top:0; right:0; border-width:2px 2px 0 0;}
+  .numwrap .bl{bottom:0; left:0; border-width:0 0 2px 2px;}
+  .numwrap .br{bottom:0; right:0; border-width:0 2px 2px 0;}
+  .setup-summary .num{font-family:"Anton",sans-serif; font-size:50px; color:var(--lime); line-height:1;}
+  .setup-summary .meta{font-size:12.5px; color:var(--chalk-dim); line-height:1.55;}
+  .setup-summary .meta b{color:var(--chalk); font-weight:800;}
+  .edit-link{margin-left:auto; font-size:10.5px; color:var(--lime); font-weight:800; background:none; padding:6px 10px; border:1.4px solid var(--lime); text-transform:uppercase; letter-spacing:0.5px;}
+  .product{display:flex; gap:12px; padding:15px 0; border-top:1px solid var(--line);}
+  .product:first-child{border-top:none;}
+  .product .check{flex:0 0 auto; padding-top:2px;}
+  .product .check input{width:20px; height:20px; accent-color:var(--lime);}
+  .product .body{flex:1; min-width:0;}
+  .product .top-row{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+  .product .pname{font-weight:800; font-size:14.5px;}
+  .badge.brandtag{font-size:9.5px; font-weight:800; letter-spacing:0.6px; padding:3px 7px; border:1.2px solid var(--lime); color:var(--lime); text-transform:uppercase; white-space:nowrap;}
+  .product .rate{font-size:11.5px; color:var(--chalk-dim); margin-top:4px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px;}
+  .product .blurb{font-size:13px; color:var(--chalk-dim); margin-top:6px; line-height:1.5;}
+  .brand-heading{font-size:13px; font-weight:800; color:var(--chalk); text-transform:uppercase; letter-spacing:1px; margin:28px 0 6px; display:flex; align-items:center; gap:8px;}
+  .brand-heading .dot{width:7px; height:7px; background:var(--lime); flex:0 0 auto;}
+  details.catgroup{background:var(--paper); border:1px solid var(--line); margin:8px 0; padding:0;}
+  details.catgroup summary{list-style:none; cursor:pointer; padding:13px 16px; font-weight:800; font-size:12.5px; text-transform:uppercase; letter-spacing:0.6px; display:flex; align-items:center; justify-content:space-between; gap:10px; color:var(--lime);}
+  details.catgroup summary::-webkit-details-marker{display:none;}
+  details.catgroup summary::after{content:"+"; font-family:"Anton",sans-serif; font-size:16px; flex:0 0 auto;}
+  details.catgroup[open] summary::after{content:"–";}
+  details.catgroup .catbody{padding:0 16px 6px;}
+  .month-group{margin-top:22px;}
+  .month-group h4{font-size:12.5px; font-weight:800; color:var(--chalk); margin:0 0 10px; text-transform:uppercase; letter-spacing:1px; border-left:3px solid var(--lime); padding-left:8px;}
+  .task{display:flex; gap:13px; padding:14px 0; border-top:1px solid var(--line); align-items:flex-start;}
+  .month-group .task:first-child{border-top:none;}
+  .task.done .ttitle{text-decoration:line-through; color:var(--chalk-dim);}
+  .task .datebadge{flex:0 0 50px; text-align:center; background:var(--pitch2); border:1.4px solid var(--line-bright); padding:6px 2px;}
+  .task .datebadge .d{font-family:"Anton",sans-serif; font-size:19px; line-height:1; color:var(--lime);}
+  .task .datebadge .m{font-size:9px; color:var(--chalk-dim); text-transform:uppercase; letter-spacing:0.5px; font-weight:700;}
+  .task .content{flex:1; min-width:0;}
+  .task .trow{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .ttitle{font-weight:800; font-size:14px;}
+  .tag{font-size:9.5px; font-weight:800; padding:3px 7px; white-space:nowrap; text-transform:uppercase; letter-spacing:0.4px; color:var(--pitch); background:var(--chalk-dim);}
+  .tag.Fertiliser,.tag.Starter{background:var(--lime);}
+  .tag.Watering{background:var(--ice);}
+  .tag.Milestone{background:var(--hazard);}
+  .tag.Mowing{background:#E3D46A;}
+  .tag.Wetting{background:var(--ice);}
+  .tag.Seasonal{background:var(--ice);}
+  .tag.Weed,.tag.Pest,.tag.Fungicide{background:var(--hazard);}
+  .tag.Soil,.tag.PGR,.tag.Gear,.tag.Custom{background:#B79CF0;}
+  .tnote{font-size:12.5px; color:var(--chalk-dim); margin-top:5px; line-height:1.5;}
+  .trel{font-size:11px; color:var(--lime); font-weight:800; margin-top:6px; text-transform:uppercase; letter-spacing:0.4px;}
+  .trel.overdue{color:var(--danger);}
+  .tactions{display:flex; gap:14px; margin-top:9px; align-items:center;}
+  .tactions a{font-size:11.5px; font-weight:800; color:var(--pitch); background:var(--lime); padding:5px 10px; display:inline-flex; align-items:center; gap:4px; text-decoration:none; text-transform:uppercase; letter-spacing:0.4px;}
+  .task input[type=checkbox]{width:19px; height:19px; margin-top:2px; accent-color:var(--lime); flex:0 0 auto;}
+  .empty{padding:34px 10px; text-align:center; color:var(--chalk-dim); border:1px dashed var(--line-bright);}
+  .addform{display:none; margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
+  .addform.open{display:block;}
+  footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:11px; color:var(--chalk-dim); line-height:1.7;}
+  .toast{position:fixed; left:50%; bottom:calc(22px + env(safe-area-inset-bottom,0px)); transform:translate(-50%,12px); background:var(--lime); color:var(--pitch); padding:11px 18px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; opacity:0; pointer-events:none; transition:all .25s ease; z-index:50; white-space:nowrap; font-size:12px;}
+  .toast.show{opacity:1; transform:translate(-50%,0);}
+  .hidden{display:none !important;}
+  .tip-hero{padding:26px 0 6px;}
+  .tip-hero .eyebrow{font-size:11.5px; color:var(--lime); font-weight:800; letter-spacing:1.4px; text-transform:uppercase;}
+  .tip-hero h2.display{font-size:36px; line-height:1; margin:10px 0 12px;}
+  details.tip{background:var(--paper); border:1px solid var(--line); margin:10px 0; padding:0;}
+  details.tip summary{list-style:none; cursor:pointer; padding:15px 16px; font-weight:800; font-size:14.5px; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  details.tip summary::-webkit-details-marker{display:none;}
+  details.tip summary::after{content:"+"; font-family:"Anton",sans-serif; font-size:18px; color:var(--lime); flex:0 0 auto;}
+  details.tip[open] summary::after{content:"–";}
+  details.tip .tip-body{padding:0 16px 18px; font-size:13.5px; color:var(--chalk-dim); line-height:1.65;}
+  details.tip .tip-body h5{color:var(--chalk); font-size:12px; text-transform:uppercase; letter-spacing:0.6px; margin:14px 0 6px;}
+  details.tip .tip-body ul{margin:6px 0; padding-left:18px;}
+  details.tip .tip-body li{margin:5px 0;}
+  .mini-table{width:100%; border-collapse:collapse; margin:8px 0; font-size:12.5px;}
+  .mini-table th, .mini-table td{text-align:left; padding:7px 8px; border-bottom:1px solid var(--line);}
+  .mini-table th{color:var(--lime); text-transform:uppercase; letter-spacing:0.4px; font-size:10.5px;}
+  .glossary dt{color:var(--chalk); font-weight:800; font-size:13px; margin-top:10px;}
+  .glossary dd{margin:2px 0 0; color:var(--chalk-dim);}
+  .arearow{border:1px solid var(--line-bright); padding:14px; margin:10px 0; background:var(--pitch2); position:relative;}
+  .arearow .rm{position:absolute; top:10px; right:10px; font-size:10px; font-weight:800; color:var(--danger); background:none; border:1px solid var(--danger); padding:4px 8px; text-transform:uppercase; letter-spacing:0.4px;}
+  .results-table{width:100%; border-collapse:collapse; margin:10px 0; font-size:13px;}
+  .results-table th,.results-table td{text-align:left; padding:9px 6px; border-bottom:1px solid var(--line);}
+  .results-table th{color:var(--lime); font-size:10px; text-transform:uppercase; letter-spacing:0.4px;}
+  .results-table tr.totalrow td{font-weight:800; color:var(--chalk); border-top:2px solid var(--lime); border-bottom:none;}
+  .calc-mode-toggle{display:flex; gap:0; margin-bottom:14px;}
+  .calc-mode-toggle button{flex:1; padding:11px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; background:var(--pitch2); border:1.4px solid var(--line-bright); color:var(--chalk-dim);}
+  .calc-mode-toggle button:first-child{border-right:none;}
+  .calc-mode-toggle button.active{background:var(--lime); color:var(--pitch); border-color:var(--lime);}
+  .ratenote{font-size:12px; color:var(--chalk-dim); margin:6px 0 4px; line-height:1.5; font-style:italic;}
+  .schemegrid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;}
+  .schemebtn{border:1.6px solid var(--line-bright); padding:12px; text-align:left; background:var(--pitch2); cursor:pointer;}
+  .schemebtn.active{border-color:var(--lime);}
+  .schemebtn .swatch{display:flex; gap:4px; margin-bottom:8px;}
+  .schemebtn .sw{width:16px; height:16px; border-radius:50%;}
+  .schemebtn .lbl{font-size:12px; font-weight:800; color:var(--chalk); text-transform:uppercase; letter-spacing:0.3px;}
+  .settingrow{padding:16px 0; border-top:1px solid var(--line);}
+  .settingrow:first-child{border-top:none;}
+  .settingrow .desc{font-size:12px; color:var(--chalk-dim); margin-top:4px; line-height:1.5;}
+  .hemitoggle{display:flex; gap:0;}
+  .hemitoggle button{flex:1; padding:11px; font-size:12.5px; font-weight:800; text-transform:uppercase; background:var(--pitch2); border:1.4px solid var(--line-bright); color:var(--chalk-dim);}
+  .hemitoggle button:first-child{border-right:none;}
+  .hemitoggle button.active{background:var(--lime); color:var(--pitch); border-color:var(--lime);}
+  .doscol h5{color:var(--lime); font-size:11.5px; text-transform:uppercase; letter-spacing:0.6px; margin:12px 0 6px;}
+  .doscol.donts h5{color:var(--danger);}
+  .savedplan{display:flex; align-items:center; gap:10px; padding:13px 0; border-top:1px solid var(--line);}
+  .savedplan:first-child{border-top:none;}
+  .savedplan .spname{font-weight:800; font-size:14px;}
+  .savedplan .spmeta{font-size:11.5px; color:var(--chalk-dim); margin-top:2px;}
+  .savedplan .spactions{margin-left:auto; display:flex; gap:6px; flex:0 0 auto;}
+  .savedplan .spactions button{font-size:11px; font-weight:800; padding:6px 10px; text-transform:uppercase; letter-spacing:0.3px; background:var(--pitch2); border:1.2px solid var(--line-bright); color:var(--chalk);}
+  .savedplan .spactions button.load{color:var(--lime); border-color:var(--lime);}
+  .savedplan .spactions button.del{color:var(--danger); border-color:var(--danger);}
+  .issue-meta{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px;}
+  .issue-meta span{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; background:var(--pitch2); border:1px solid var(--line-bright); padding:4px 9px; color:var(--chalk-dim);}
+  .steplist{counter-reset:step; margin:10px 0 0; padding:0;}
+  .steplist li{list-style:none; counter-increment:step; position:relative; padding:0 0 14px 34px; font-size:13.5px; color:var(--chalk-dim); line-height:1.55;}
+  .steplist li::before{content:counter(step); position:absolute; left:0; top:0; width:24px; height:24px; background:var(--lime); color:var(--pitch); font-family:"Anton",sans-serif; font-size:13px; display:flex; align-items:center; justify-content:center;}
+  .steplist li b{color:var(--chalk); display:block; margin-bottom:2px; font-weight:800; font-size:13.5px;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<header class="top">
+  <div class="brand">
+    <svg class="logo" width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0.5" y="0.5" width="33" height="33" rx="5" fill="var(--pitch2)" stroke="var(--line-bright)"/>
+      <path d="M16,5.5 C23,4.3 27.8,10 26.6,17 C25.8,21.8 21.5,25.5 18,29 C16.2,30.8 13.2,30.3 13,27.8 C12.8,25.6 15,24.6 16.5,22.9 C18.7,20.4 20.2,17.3 19.1,14.1 C18.4,12 16,11.6 14.4,13 C13,14.2 13,16.2 14.1,17.4 C12.6,17.8 10.9,16.9 10.8,15.1 C10.5,10.3 13.1,6.4 16,5.5 Z" fill="var(--lime)"/>
+      <path d="M5.5,21 L7.6,17.5 L5.9,14" stroke="var(--lime)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.65" fill="none"/>
+      <path d="M9,22.5 L11.1,18.5 L9.4,14.2" stroke="var(--lime)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.4" fill="none"/>
+      <path d="M3.8,31 L5.3,23 L6.8,31 Z" fill="var(--lime)" opacity="0.9"/>
+      <path d="M7,31 L7.9,21.5 L9.2,31 Z" fill="var(--lime)" opacity="0.75"/>
+    </svg>
+    <h1>The Lawn Whisperer</h1>
+  </div>
+  <div class="segment">
+    <button class="segbtn active" id="tabPlan">Plan</button>
+    <button class="segbtn" id="tabCalc">Calc</button>
+    <button class="segbtn" id="tabTips">Tips</button>
+    <button class="segbtn" id="tabHospital">Hospital</button>
+    <button class="segbtn" id="tabSettings">Settings</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div id="planView">
+  <section id="setupHero" class="hero">
+    <div class="eyebrow">New lawn or old — we run the crew</div>
+    <h2 class="display">Set day zero.<br>We plan the rest.</h2>
+    <p>Tell us whether you're starting fresh or already established, and when day one is. Pick your products — LawnHub's full range first, plus the other brands worth having in the shed — and The Lawn Whisperer drops a complete, season-aware schedule onto the calendar.</p>
+  </section>
+
+  <div class="card hidden" id="savedPlansCard">
+    <label class="field">Saved plans</label>
+    <div id="savedPlansList"></div>
+  </div>
+
+  <div class="card" id="setupCard">
+    <label class="field">Lawn status</label>
+    <div class="hemitoggle">
+      <button id="statusNewBtn" class="active" type="button">New lawn</button>
+      <button id="statusEstablishedBtn" type="button">Established lawn</button>
+    </div>
+    <label class="field" id="layDateLabel">Date turf is laid</label>
+    <input type="date" id="layDate">
+    <label class="field">Turf type</label>
+    <select id="turfType"></select>
+    <button class="btn" id="saveSetupBtn">Build product list ↓</button>
+  </div>
+
+  <section id="summaryHero" class="hero hidden">
+    <div class="card">
+      <div class="setup-summary">
+        <div class="numwrap"><span class="bl"></span><span class="br"></span><div class="num display" id="dayCounter">0</div></div>
+        <div class="meta"><div id="summaryLine1"><b>Day 0</b> since turf went down</div><div id="summaryLine2">—</div></div>
+        <button class="edit-link" id="editSetupBtn">Edit</button>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;">
+        <input type="text" id="savePlanName" placeholder="Name this plan (optional)" style="flex:1; min-width:140px;">
+        <button class="btn small ghost" id="savePlanBtn">Save plan</button>
+        <button class="btn small ghost" id="startNewBtn" style="color:var(--danger); border-color:var(--danger);">Start new plan</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="libSection">
+    <h3>Product library</h3>
+    <p class="sub">LawnHub's full range, grouped by type. Tap a category to open it, tick what you want scheduled.</p>
+    <div id="productList"></div>
+    <button class="btn" id="generateBtn">Generate my schedule</button>
+  </section>
+
+  <section class="block hidden" id="scheduleSection">
+    <h3>Your schedule</h3>
+    <p class="sub">Tap a date to add it straight to Google Calendar, or pull the whole plan below.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px;">
+      <button class="btn small ghost" id="addCustomToggle">+ Add a reminder</button>
+    </div>
+    <div class="card addform" id="addForm">
+      <label class="field">What is it?</label>
+      <input type="text" id="customTitle" placeholder="e.g. Aerate lawn">
+      <div class="row2">
+        <div><label class="field">Date</label><input type="date" id="customDate"></div>
+        <div><label class="field">Repeat</label>
+          <select id="customRepeat">
+            <option value="0">Doesn't repeat</option>
+            <option value="30">Every 30 days</option>
+            <option value="60">Every 60 days</option>
+            <option value="90">Every 90 days (x4)</option>
+            <option value="365">Every year</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn small" id="customAddBtn" style="width:100%; margin-top:14px;">Add to schedule</button>
+    </div>
+    <div id="ledger"></div>
+  </section>
+
+  <section class="block hidden" id="uploadSection">
+    <h3>Upload to calendar</h3>
+    <p class="sub">A page like this can't get write-access to your calendar account directly — no app can, without you signing in through it. The fastest real workaround: one file with every reminder in it, imported in a single go.</p>
+    <div class="card">
+      <label class="field">Full plan</label>
+      <p style="font-size:13px; color:var(--chalk-dim); margin:0 0 6px;">Downloads one .ics file containing every task in your schedule, ready to import into Google, Apple or Outlook calendar in one step.</p>
+      <button class="btn" id="uploadBtn">Download full plan &amp; open my calendar</button>
+      <p id="noCalLinkNote" class="ratenote hidden">No calendar link saved yet — add one in Settings and this button will open it straight after downloading.</p>
+    </div>
+  </section>
+
+  <footer>
+    The Lawn Whisperer builds a suggested timeline from general Australian turf-care guidance, each product's label rate, and the seasonal calendar for your hemisphere — always check the actual product label before applying. Merch, sprayers, gift cards and bundle packs from Lawnhub's shop aren't listed individually — bundles would just double up the products already in this library.
+  </footer>
+</div><!-- /planView -->
+
+<div id="calcView" class="hidden">
+  <section class="tip-hero">
+    <div class="eyebrow">Get the dose right</div>
+    <h2 class="display">Coverage calculator</h2>
+    <p style="color:var(--chalk-dim); font-size:15px; line-height:1.55; max-width:44ch; margin:0;">Pick the product you're using and The Lawn Whisperer works out how much you need, based on the zones below — even across up to 4 areas with different turf types.</p>
+  </section>
+
+  <div class="card">
+    <label class="field">Your lawn zones</label>
+    <div id="areaRows"></div>
+    <button class="btn ghost" id="addAreaBtn" style="width:100%; margin-top:10px;">+ Add another zone</button>
+  </div>
+
+  <div class="card">
+    <label class="field">Product</label>
+    <select id="calcProductSelect"></select>
+    <p id="calcRateNote" class="ratenote"></p>
+
+    <div id="modeSection">
+      <label class="field" style="margin-top:14px;">Application type</label>
+      <div class="calc-mode-toggle">
+        <button id="modeWeightBtn" class="active" type="button">Weight / volume to area</button>
+        <button id="modeDilutionBtn" type="button">Dilution (mix with water)</button>
+      </div>
+    </div>
+
+    <div id="weightFields">
+      <div class="row3">
+        <div><label class="field">Amount</label><input type="number" id="wAmt" min="0" step="any" placeholder="2.5"></div>
+        <div><label class="field">Unit</label>
+          <select id="wUnit"><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="mL">mL</option></select>
+        </div>
+        <div><label class="field">Per m²</label><input type="number" id="wPer" min="0" step="any" placeholder="100"></div>
+      </div>
+    </div>
+
+    <div id="dilutionFields" class="hidden">
+      <div class="row2">
+        <div><label class="field">Product amount</label><input type="number" id="dProdAmt" min="0" step="any" placeholder="250"></div>
+        <div><label class="field">Unit</label>
+          <select id="dProdUnit"><option value="mL">mL</option><option value="L">L</option></select>
+        </div>
+      </div>
+      <div class="row2">
+        <div><label class="field">In water</label><input type="number" id="dWaterAmt" min="0" step="any" placeholder="5"></div>
+        <div><label class="field">Unit</label>
+          <select id="dWaterUnit"><option value="L">L</option><option value="mL">mL</option></select>
+        </div>
+      </div>
+      <label class="field">Covers how many m²</label>
+      <input type="number" id="dPer" min="0" step="any" placeholder="100">
+    </div>
+
+    <button class="btn" id="calcBtn">Calculate</button>
+  </div>
+
+  <div class="card hidden" id="calcResults"></div>
+
+  <footer>Figures come from whatever rate is shown — always cross-check against the actual product label, since application rates can vary by formulation, turf condition and time of year.</footer>
+</div><!-- /calcView -->
+
+<div id="tipsView" class="hidden">
+  <section class="tip-hero">
+    <div class="eyebrow">The playbook</div>
+    <h2 class="display">Tips &amp; tricks</h2>
+    <p style="color:var(--chalk-dim); font-size:15px; line-height:1.55; max-width:44ch; margin:0 0 14px;">Everything the crew knows — pick your turf below for the dos, don'ts and quirks that apply to it.</p>
+    <label class="field">Your turf type</label>
+    <select id="tipsTurfSelect"></select>
+  </section>
+
+  <div class="card" id="turfTipsCard"></div>
+
+  <details class="tip">
+    <summary>Watering, from turf-down to established</summary>
+    <div class="tip-body">
+      <table class="mini-table">
+        <tr><th>Period</th><th>Frequency</th></tr>
+        <tr><td>Days 1–7</td><td>Lightly, morning and evening</td></tr>
+        <tr><td>Days 8–14</td><td>Once daily</td></tr>
+        <tr><td>Days 15–28</td><td>Every second day</td></tr>
+        <tr><td>Day 28+</td><td>2–3x per week, deep watering, established routine</td></tr>
+      </table>
+      <p>Water immediately after laying and immediately after the first mow — it takes the stress off leaves that have just been cut.</p>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Mowing height by turf type</summary>
+    <div class="tip-body">
+      <table class="mini-table">
+        <tr><th>Turf</th><th>Height</th></tr>
+        <tr><td>Zoysia Australis</td><td>20–35mm</td></tr>
+        <tr><td>Buffalo (Sir Walter)</td><td>30–50mm</td></tr>
+        <tr><td>Buffalo (Palmetto)</td><td>30–50mm</td></tr>
+        <tr><td>Couch (Santa Ana)</td><td>15–25mm</td></tr>
+        <tr><td>Couch (Nullarbor)</td><td>15–25mm</td></tr>
+        <tr><td>Kikuyu (Eureka)</td><td>20–35mm</td></tr>
+        <tr><td>Zoysia (Empire)</td><td>15–30mm</td></tr>
+        <tr><td>Zoysia (Sir Grange)</td><td>10–25mm</td></tr>
+        <tr><td>TifTuf</td><td>10–20mm</td></tr>
+        <tr><td>Cool-season blend</td><td>35–50mm</td></tr>
+        <tr><td>RTF Tall Fescue</td><td>35–50mm</td></tr>
+      </table>
+      <p>Rule of thumb: never remove more than a third of the leaf blade in one cut.</p>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Reading your lawn — early warning signs</summary>
+    <div class="tip-body">
+      <h5>Yellowing</h5>
+      <ul>
+        <li>Even, pale yellow across the lawn — usually nitrogen hungry, due a feed.</li>
+        <li>Yellow with green veins — often iron deficiency, especially after rain leaches the soil.</li>
+      </ul>
+      <h5>Thinning or bare patches</h5>
+      <ul>
+        <li>Circular dead patches expanding outward — check for fungal disease.</li>
+        <li>Ragged, chewed leaf blades and birds pecking at the lawn — check for grubs or caterpillars underneath.</li>
+      </ul>
+      <h5>Dry, crispy patches that won't green up</h5>
+      <ul><li>Often hydrophobic soil — water is running off instead of soaking in. A wetting agent is the fix, not more water.</li></ul>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Lawn armyworm &amp; caterpillar watch</summary>
+    <div class="tip-body">
+      <p>Armyworm moths lay eggs that hatch into caterpillars which strip grass blades overnight — a healthy lawn can look chewed and brown within days, usually worst from late summer into autumn.</p>
+      <h5>Signs</h5>
+      <ul>
+        <li>Ragged, notched leaf blades and patches that look "scalped" overnight.</li>
+        <li>Increased bird activity on the lawn early morning — they're hunting the caterpillars.</li>
+        <li>Small green or brown caterpillars visible if you part the grass at dusk.</li>
+      </ul>
+      <h5>What to reach for</h5>
+      <ul>
+        <li>A fast knockdown liquid insecticide once you see damage.</li>
+        <li>A residual granular like Acelepryn applied preventatively in early summer if armyworm has hit your area before.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Weed control — pre-emergent vs post-emergent</summary>
+    <div class="tip-body">
+      <p><b>Pre-emergent</b> herbicides (like Barricade, Spartan or Onset) form a barrier in the soil that stops weed seeds germinating — apply before the weed season starts, not after weeds are already up.</p>
+      <p><b>Post-emergent, selective</b> herbicides (like NSFW or Monument) are sprayed onto weeds that are already growing and target the weed without harming the lawn — always check the label lists your turf type as safe.</p>
+      <p>Don't apply weed control on a lawn under stress (drought, recent scalping, brand-new turf) — wait until it's actively growing and established.</p>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Fungal disease — when to treat</summary>
+    <div class="tip-body">
+      <p>Most lawn fungus shows up in warm, humid, still conditions. Look for rings or patches of discoloured grass, sometimes with a smoke-grey or orange tinge at the edge.</p>
+      <ul>
+        <li><b>Brown patch / large circular rings</b> — a broad-spectrum fungicide like Heritage Maxx or Bumper.</li>
+        <li><b>Damping off or root rot in cool, wet conditions</b> — a systemic fungicide like Subdue Maxx targets Pythium at the root.</li>
+      </ul>
+      <p>Improve airflow and avoid watering in the evening before reaching for a spray.</p>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Growth regulators — do you actually need one?</summary>
+    <div class="tip-body">
+      <p>A plant growth regulator (PGR) like Primo Maxx doesn't feed the lawn — it slows vertical leaf growth so the plant pushes energy sideways into density and root mass instead. Most home lawns don't need one until the turf is fully established.</p>
+      <p>Trimmit is a lighter-touch option often used along garden bed edges and turf aprons.</p>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Seasonal rhythm (Southern Hemisphere)</summary>
+    <div class="tip-body">
+      <table class="mini-table">
+        <tr><th>Season</th><th>Focus</th></tr>
+        <tr><td>Spring (Sep–Nov)</td><td>Pre-emergent herbicide, first big feed as soil warms, wetting agent before summer heat</td></tr>
+        <tr><td>Summer (Dec–Feb)</td><td>Regular mowing, watch for armyworm &amp; fungus, deep infrequent watering</td></tr>
+        <tr><td>Autumn (Mar–May)</td><td>Second pre-emergent round, ease off nitrogen, iron for colour</td></tr>
+        <tr><td>Winter (Jun–Aug)</td><td>Minimal mowing, avoid heavy fertiliser, spot-treat winter weeds</td></tr>
+      </table>
+      <p style="margin-top:8px;">Set to Northern Hemisphere in Settings and every seasonal reminder in your schedule shifts six months to match.</p>
+    </div>
+  </details>
+
+  <details class="tip">
+    <summary>Glossary — decoding the label</summary>
+    <div class="tip-body">
+      <dl class="glossary">
+        <dt>Foliar</dt><dd>Applied to and absorbed through the leaf — fast acting, shorter-lived than granular.</dd>
+        <dt>Granular</dt><dd>Solid prill spread on soil, broken down over weeks — slower, longer-lasting.</dd>
+        <dt>Slow/controlled-release</dt><dd>Nutrients feed out gradually over the stated period instead of dumping all at once.</dd>
+        <dt>Wetting agent / surfactant</dt><dd>Breaks water's surface tension so it soaks into hydrophobic soil instead of running off.</dd>
+        <dt>Soil penetrant</dt><dd>Helps water and dissolved nutrients move deeper into the root zone, faster than a standard wetting agent.</dd>
+        <dt>Pre-emergent</dt><dd>Stops weed seeds germinating — applied before weeds appear.</dd>
+        <dt>Post-emergent</dt><dd>Kills weeds that are already growing.</dd>
+        <dt>Selective</dt><dd>Kills the target weed without harming the lawn species listed on the label.</dd>
+        <dt>Systemic</dt><dd>Taken up into the plant's tissue rather than sitting on the surface — longer lasting control.</dd>
+        <dt>Rhizome / stolon</dt><dd>Underground and above-ground runners a lawn spreads and repairs itself with.</dd>
+        <dt>Thatch</dt><dd>A layer of dead organic matter between soil and green leaf — too much blocks water and feed.</dd>
+        <dt>PGR</dt><dd>Plant growth regulator — slows vertical growth, redirects energy to density and roots.</dd>
+      </dl>
+    </div>
+  </details>
+</div><!-- /tipsView -->
+
+<div id="hospitalView" class="hidden">
+  <section class="tip-hero">
+    <div class="eyebrow">Triage</div>
+    <h2 class="display">The Hospital</h2>
+    <p style="color:var(--chalk-dim); font-size:15px; line-height:1.55; max-width:44ch; margin:0;">Work down from the general area of the problem to the exact symptom, and get a tailored repair plan.</p>
+  </section>
+
+  <div class="card">
+    <label class="field">1. What area is affected?</label>
+    <select id="hospPrimary"></select>
+
+    <div id="hospSecondaryWrap" class="hidden">
+      <label class="field">2. Which best describes it?</label>
+      <select id="hospSecondary"></select>
+    </div>
+
+    <div id="hospTertiaryWrap" class="hidden">
+      <label class="field">3. One more detail</label>
+      <select id="hospTertiary"></select>
+    </div>
+  </div>
+
+  <div class="card hidden" id="issueCard"></div>
+</div><!-- /hospitalView -->
+
+<div id="settingsView" class="hidden">
+  <section class="tip-hero">
+    <div class="eyebrow">Configure</div>
+    <h2 class="display">Settings</h2>
+    <p style="color:var(--chalk-dim); font-size:15px; line-height:1.55; max-width:44ch; margin:0;">Your calendar link, look and feel, and how the schedule engine behaves.</p>
+  </section>
+
+  <div class="card">
+    <div class="settingrow">
+      <label class="field">Calendar link</label>
+      <input type="url" id="calendarLinkInput" placeholder="https://calendar.google.com/...">
+      <div class="desc">Paste the link you use to open your calendar (e.g. your Google Calendar import page, or just your calendar's home). "Upload to calendar" on the Plan tab will open this right after downloading your plan.</div>
+    </div>
+    <div class="settingrow">
+      <label class="field">Hemisphere</label>
+      <div class="hemitoggle">
+        <button id="hemiSouthBtn" class="active" type="button">Southern</button>
+        <button id="hemiNorthBtn" type="button">Northern</button>
+      </div>
+      <div class="desc">Seasonal reminders (pre-emergent windows, PGR season, fungicide timing) are written for the Southern Hemisphere by default. Switch this if you're north of the equator and every seasonal date shifts six months to match your seasons.</div>
+    </div>
+    <div class="settingrow">
+      <label class="field">Reminder lead time</label>
+      <select id="leadTimeSelect">
+        <option value="0">On the day</option>
+        <option value="1">1 day before</option>
+        <option value="2">2 days before</option>
+        <option value="7">1 week before</option>
+      </select>
+      <div class="desc">How far ahead the alarm fires inside the downloaded calendar file. Google Calendar add-links use your calendar's own default reminder instead.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="field">Colour scheme</label>
+    <div class="schemegrid" id="schemeGrid"></div>
+  </div>
+
+  <div class="card">
+    <div class="settingrow" style="border-top:none;">
+      <label class="field">Reset</label>
+      <div class="desc" style="margin-bottom:10px;">Clears your turf setup, product selections, schedule progress, saved zones and settings from this device. Can't be undone.</div>
+      <button class="btn ghost" id="resetBtn" style="width:100%; color:var(--danger); border-color:var(--danger);">Clear all data</button>
+    </div>
+  </div>
+</div><!-- /settingsView -->
+
+</div><!-- /wrap -->
+
+<script>
+/* ================= DATA ================= */
+const TURF_TYPES = [
+  {id:'zoysia-australis', name:'Zoysia Australis', firstMow:18},
+  {id:'buffalo', name:'Buffalo — Sir Walter / Sapphire', firstMow:12},
+  {id:'palmetto', name:'Buffalo — Palmetto', firstMow:14},
+  {id:'couch', name:'Couch — Santa Ana / Wintergreen', firstMow:12},
+  {id:'nullarbor', name:'Couch — Nullarbor', firstMow:10},
+  {id:'kikuyu', name:'Kikuyu — Eureka', firstMow:10},
+  {id:'zoysia', name:'Zoysia — Empire', firstMow:14},
+  {id:'sirgrange', name:'Zoysia — Sir Grange (Zeon)', firstMow:16},
+  {id:'tiftuf', name:'TifTuf Bermuda', firstMow:10},
+  {id:'coolseason', name:'Cool-season — Fescue / Rye blend', firstMow:18},
+  {id:'rtffescue', name:'RTF Tall Fescue', firstMow:21},
+];
+
+const TURF_TIPS = {
+  'zoysia-australis': {
+    profile:['Fast-establishing for a zoysia, with a soft medium leaf and good wear recovery.','Needs at least 4 hours of direct light — shade tolerant, not shade proof.','Deep root system once mature — genuinely drought tolerant, but only after a full season.','Slower vertical growth than buffalo or couch, so it needs mowing less often.'],
+    dos:['Water lightly and consistently through the first month, then ease right off.','Mow at 20–35mm once it has rooted down, around day 18.','Feed lightly and regularly rather than one heavy dose.','Give it a full season before judging its drought tolerance.'],
+    donts:["Don't scalp it — it recovers slowly from a hard cut compared to couch or kikuyu.","Don't panic if it spreads slower than a couch lawn early on — that's normal for zoysia.","Don't over-water an established lawn — it encourages shallow roots and disease.","Don't expect it to hold full colour in less than 4 hours of daily sun."]
+  },
+  buffalo: {
+    profile:['Broad, soft leaf — comfortable underfoot, popular for families and pets.','Good shade tolerance for a warm-season grass.','Moderate drought tolerance; prefers not to dry out completely.','Spreads by stolons, so it self-repairs reasonably well.'],
+    dos:['Mow high, 30–50mm, to protect the growing point and keep it dense.','Water deeply and less often rather than little and often.','Check every herbicide label specifically says "buffalo safe" before spraying.'],
+    donts:["Don't use MCPA-heavy or unlabelled broadleaf herbicides — many will badly damage or kill buffalo.","Don't mow it short — scalping opens it up to weed invasion.","Don't let thatch build up unchecked; it holds moisture against the crown and invites disease."]
+  },
+  palmetto: {
+    profile:['One of the older heritage soft-leaf buffalo varieties — broader, slightly coarser leaf than Sir Walter.','Very shade tolerant, holds colour well through the cooler months.','Durable and low maintenance once established.'],
+    dos:['Mow high, 30–50mm, same as any buffalo.','Water deeply and infrequently rather than little and often.','Double-check any herbicide is labelled buffalo-safe before spraying.'],
+    donts:["Don't use unlabelled or MCPA-heavy broadleaf herbicides — buffalo varieties are easily damaged.","Don't scalp it.","Don't expect the very fine, soft texture of newer buffalo cultivars — Palmetto's leaf is broader."]
+  },
+  couch: {
+    profile:['Fine leaf, full-sun lover, extremely wear tolerant.','Spreads fast via both stolons and rhizomes.','Goes dormant and browns off in cold winters — that\'s normal, not dead.'],
+    dos:['Mow low and often through the growing season, 15–25mm.','Feed regularly through summer while it\'s actively growing.','Dethatch or scalp lightly in early spring to clear winter thatch.'],
+    donts:["Don't plant it expecting it to thrive in heavy shade — it will thin out fast.","Don't panic about winter browning — resist the urge to over-fertilise a dormant lawn.","Don't let it run unchecked into garden beds — edge it regularly."]
+  },
+  nullarbor: {
+    profile:['A fine-leaf couch bred specifically for wear and heat resistance.','Needs full sun — low shade tolerance, roughly up to 25%.','High maintenance: vigorous growth that gets away from you fast if neglected.'],
+    dos:['Mow low and often — it grows quickly through the warm months.','Feed regularly while actively growing to keep density up under wear.','Reserve it for full-sun, high-traffic areas — driveways, side yards, play spaces.'],
+    donts:["Don't plant it in shaded parts of the yard — it will thin out badly.","Don't skip mows — vigorous growth turns stemmy and coarse fast if left.","Don't neglect edging — like any couch it will run into garden beds."]
+  },
+  zoysia: {
+    profile:['Fine-to-medium leaf, denser and more shade tolerant than couch.','Slower to establish than couch or buffalo — patience pays off.','Forms a tight, weed-resistant sward once mature.'],
+    dos:['Be patient through establishment — it can take longer than other warm-season turf to fully knit.','Keep mower blades sharp; a blunt blade shreds and browns zoysia tips.','Water attentively in the first season while roots are still shallow.'],
+    donts:["Don't expect couch-speed establishment or spread.","Don't mow with dull blades.","Don't over-water once it's established — thick zoysia can hold moisture and invite fungus."]
+  },
+  sirgrange: {
+    profile:['A premium fine-bladed zoysia (Zeon Zoysia) with exceptional shade and drought tolerance.','Very low nutrient and water requirements — one of the lowest-maintenance turf options available.','Excellent late-season colour retention and early spring green-up.','Can be mown very short (like a putting green) or kept longer — genuinely versatile.'],
+    dos:['Feed sparingly — it plain doesn\'t need much fertiliser, and over-feeding just creates thatch and mowing work.','Mow with sharp blades on a schedule that suits the height you\'re keeping it at.','Use it confidently in shadier spots where other warm-season turf struggles.'],
+    donts:["Don't over-fertilise thinking more feed means more growth — it doesn't, and excess feed invites disease.","Don't over-water — its low water requirement is one of its main selling points.","Don't mistake its slower spread for a lawn that's failing to establish."]
+  },
+  tiftuf: {
+    profile:['Fine-leaf hybrid Bermuda bred for elite drought tolerance.','Very wear tolerant — a genuine choice for high-traffic, full-sun areas.','Needs full sun; thins out fast in shade.'],
+    dos:['Mow low and often, 10–20mm, with a sharp, well-maintained mower.','Feed through the growing season to keep density up.','Use it for the sunniest, highest-wear parts of the yard.'],
+    donts:["Don't plant it in shade — it will thin and fail there.","Don't let it go too long between mows; it gets stemmy and coarse fast.","Don't expect green through a hard frost — it goes dormant in the cold."]
+  },
+  coolseason: {
+    profile:['Fine-to-medium leaf fescue/rye blend that stays green through winter — no summer dormancy switch.','Bunch-forming, not a runner — it doesn\'t spread sideways to self-repair.','Prefers cooler climates and handles shade better than most warm-season turf.'],
+    dos:['Mow higher, 35–50mm, to shade the soil and protect the crown in summer heat.','Overseed thin or bare patches — it won\'t fill them in on its own.','Water deeply through summer to help it ride out heat stress.'],
+    donts:["Don't scalp it — a bunch-type grass is stressed badly by a hard cut.","Don't wait for bare patches to fill in by themselves — they need reseeding.","Don't push heavy nitrogen feeds during summer heat."]
+  },
+  rtffescue: {
+    profile:['A cool-season tall fescue bred with rhizomes, so — unlike most fescues — it can spread sideways and self-repair small bare patches.','Frost tolerant and stays green through winter; struggles once it gets hot.','Slow to establish and low drought tolerance, with high water requirements compared to warm-season turf.','Non-invasive — it won\'t run into garden beds the way couch or kikuyu will.'],
+    dos:['Be patient while it establishes — it\'s genuinely slower to knit down than warm-season turf.','Mow higher, 35–50mm, to protect the crown through summer heat.','Water deeply and consistently, especially over summer when it\'s under the most stress.'],
+    donts:["Don't scalp it — a hard cut stresses fescue badly.","Don't expect it to handle drought like a buffalo or couch lawn — it needs reliably more water.","Don't judge it against warm-season establishment speed — slow and steady is normal here."]
+  }
+};
+
+function leaf(tag, timeframe, causes, steps, prevention){
+  return {tag, timeframe, causes, steps, prevention};
+}
+
+const HOSPITAL = [
+  { id:'mowing', label:'Mowing problems', children:[
+    { id:'scalped', label:'Cut too short (scalped)', plan: leaf('Mowing mistake','2–6 weeks to recover',
+      ['Mower deck set too low for the turf type.','Mowing infrequently, so more than a third of the leaf was removed in one cut.'],
+      [
+        {title:'Stop mowing low', desc:'Raise the mower deck back to the correct height for your turf type (check the Tips tab) and leave it there.'},
+        {title:'Water and feed lightly', desc:'Water deeply a couple of times a week and apply a light, balanced liquid feed to support regrowth — hold off on anything heavy in nitrogen until it recovers.'},
+        {title:'Keep foot traffic off it', desc:'Scalped turf is stressed and vulnerable — keep pets and play off the area while it bounces back.'},
+        {title:'Resume normal mowing gradually', desc:'Once it\'s visibly recovered and thickened back up, return to your regular mowing schedule.'}
+      ],
+      ['Mow more often in the growing season rather than letting it get away from you.','Never remove more than a third of the leaf blade in one cut.'])},
+    { id:'stripy', label:'Uneven, stripy or patchy after mowing', plan: leaf('Mowing mistake','Improves next cut or two',
+      ['Blunt or uneven mower blades tearing rather than cutting.','Mowing the same direction every time, or mowing while the grass was wet.'],
+      [
+        {title:'Check and sharpen the blades', desc:'Torn, ragged tips (visible up close, greyish within a day) mean the blades need sharpening or replacing.'},
+        {title:'Level the deck', desc:'Check the mower deck sits evenly front-to-back and side-to-side — an uneven deck scalps in some spots and leaves grass long in others.'},
+        {title:'Vary your mowing direction', desc:'Alternate direction each cut to stop the grass leaning and the lawn developing a permanent stripe or wheel-track pattern.'},
+        {title:'Mow when dry', desc:'Wet grass clumps, tears and clogs the deck instead of cutting cleanly — wait until it\'s dry.'}
+      ],
+      ['Sharpen mower blades once or twice a season depending on use.'])},
+    { id:'clippings', label:'Clippings smothering the lawn', plan: leaf('Mowing mistake','1–2 weeks',
+      ['Too much cut off in one go, leaving heavy clumps of clippings sitting on top of the lawn and blocking light.'],
+      [
+        {title:'Rake or blow off heavy clumps', desc:'Clear any thick clumps sitting on the surface so light and air reach the leaf underneath.'},
+        {title:'Mow more often, in smaller increments', desc:'Removing less leaf per cut means the clippings are fine enough to break down and feed the soil instead of smothering it.'},
+        {title:'Use a catcher on a long-overdue mow', desc:'If the lawn has gotten away from you, catch the clippings that first cut rather than leaving a heavy layer behind.'}
+      ],
+      ['Stick to the one-third rule and clippings will usually be fine left on the lawn ("grasscycling") rather than needing to be caught.'])},
+    { id:'ruts', label:'Wheel ruts or tracks left behind', plan: leaf('Mowing mistake','2–4 weeks',
+      ['Mowing on soft or wet soil, or always driving/turning the mower in the same spot.'],
+      [
+        {title:'Stay off it while soft', desc:'Avoid mowing or driving on the lawn until the soil has dried out and firmed up.'},
+        {title:'Fill and firm shallow ruts', desc:'For minor ruts, press the turf back down by hand or with a light roller once the soil has dried.'},
+        {title:'Vary your turning spots', desc:'Change where you turn the mower each time rather than pivoting in the same place.'}
+      ],
+      ['Avoid mowing within a day or two of heavy rain.'])},
+  ]},
+
+  { id:'colour', label:'Colour & discolouration', children:[
+    { id:'yellow', label:'Yellowing', children:[
+      { id:'yellow-even', label:'Even, pale yellow all over', plan: leaf('Nutrition','1–2 weeks after feeding',
+        ['Nitrogen deficiency — the lawn is simply hungry.'],
+        [
+          {title:'Apply a nitrogen-led fertiliser', desc:'A granular slow-release feed (like Trojan) or a quick liquid greener (like Money Shot) both work — liquid shows results faster.'},
+          {title:'Water it in', desc:'Water straight after applying granular fertiliser so it starts breaking down rather than sitting on the leaf.'},
+          {title:'Give it time', desc:'Expect visible greening within 1–2 weeks of a liquid feed, a little longer for granular.'}
+        ],
+        ['Stick to a regular feeding schedule rather than waiting until the lawn looks hungry.'])},
+      { id:'yellow-veins', label:'Yellow leaf with green veins', plan: leaf('Nutrition','1–2 weeks after treatment',
+        ['Iron deficiency — common after heavy rain leaches iron out of the soil, especially on sandy soils.'],
+        [
+          {title:'Apply an iron-based product', desc:'A liquid iron or bio-stimulant like Iron Guard Plus greens the lawn up fast without pushing excessive growth.'},
+          {title:'Check soil pH if it keeps recurring', desc:'Very alkaline soils lock up iron — a soil test will confirm if that\'s the underlying issue.'}
+        ],
+        ['A regular light iron top-up through the growing season helps hold colour on sandy soils.'])},
+      { id:'yellow-afterchem', label:'Yellow right after spraying or fertilising', plan: leaf('Chemical stress','1–3 weeks',
+        ['Fertiliser burn from too much product, or not watering it in.','Herbicide stress, especially on a sensitive turf type like buffalo.'],
+        [
+          {title:'Flush the area', desc:'Water the area thoroughly and repeatedly over the next day or two to dilute and wash excess product through.'},
+          {title:'Stop further applications', desc:'Don\'t apply anything else to the area until it has recovered — stacking products compounds the stress.'},
+          {title:'Check the label against your turf type', desc:'If it was a herbicide, confirm it was actually labelled safe for your turf variety — buffalo especially reacts badly to the wrong actives.'},
+          {title:'Be patient', desc:'Chemical stress usually grows out over a few weeks as the lawn is mowed and produces new leaf.'}
+        ],
+        ['Always water granular fertiliser in immediately, and double-check any herbicide label against your exact turf type before spraying.'])},
+      { id:'yellow-dogspots', label:'Yellow patches where the dog goes', plan: leaf('Other','2–4 weeks',
+        ['Concentrated nitrogen in dog urine scorching the grass at the point of contact.'],
+        [
+          {title:'Flush fresh spots', desc:'Hose down a spot as soon as you notice it to dilute the nitrogen before it burns.'},
+          {title:'Trim dead growth', desc:'Once a spot has browned off, trim away the dead leaf so new growth isn\'t competing for light.'},
+          {title:'Feed and water the spot', desc:'A light liquid feed plus consistent watering helps the surrounding grass grow back into the patch.'}
+        ],
+        ['Train pets to a mulched or gravel toilet spot, or flush likely areas with water as a habit.'])},
+    ]},
+    { id:'greyblue', label:'Grey-blue tinge, footprints stay visible', plan: leaf('Water','Same day, once watered',
+      ['Early drought stress — a classic first sign the lawn needs water before it browns off completely.'],
+      [
+        {title:'Water deeply that day', desc:'Give it a long, deep water rather than a light sprinkle — the goal is moisture reaching well into the root zone.'},
+        {title:'Check for hydrophobic soil', desc:'If water is beading or running off rather than soaking in, a wetting agent may be needed alongside the water.'},
+        {title:'Adjust the watering schedule going forward', desc:'This is an early warning sign — increase frequency or duration before it progresses to browning.'}
+      ],
+      ['Footprints or mower wheel marks staying visible after walking on the lawn is the earliest drought stress sign — act on it before the lawn actually browns.'])},
+    { id:'suddenbrown', label:'Sudden browning, quickly', children:[
+      { id:'brown-chemical', label:'After a recent spray or heavy feed', plan: leaf('Chemical stress','2–4 weeks',
+        ['Fertiliser or herbicide burn — too strong a dose, wrong product for the turf type, or applied in hot conditions.'],
+        [
+          {title:'Water the area heavily', desc:'Flush the area with water over the next couple of days to dilute residual product in the soil.'},
+          {title:'Hold off on any further treatment', desc:'Let the lawn recover before applying anything else.'},
+          {title:'Review the label next time', desc:'Check the application rate and turf-type safety before the next round.'}
+        ],
+        ['Never apply fertiliser or spray in the heat of the day — early morning or evening reduces burn risk.'])},
+      { id:'brown-frost', label:'After a cold night or frost', plan: leaf('Seasonal / frost','Weeks, or until spring for warm-season turf',
+        ['Frost damage — ice crystals rupturing cell walls in the leaf, common overnight in a cold snap.'],
+        [
+          {title:'Leave it alone', desc:'Don\'t mow or walk on frosted grass — the frozen leaf is brittle and easily damaged further.'},
+          {title:'Wait for it to thaw naturally', desc:'Let the day warm the lawn up on its own rather than trying to speed it up.'},
+          {title:'For warm-season turf, expect it to sit brown until spring', desc:'If this is heading into winter, browning after frost on buffalo, couch or kikuyu is often just early dormancy, not lasting damage.'}
+        ],
+        ['A TurfRise-style breathable cover over new or sensitive turf on forecast frosty nights reduces damage.'])},
+      { id:'brown-fuel', label:'One patch only — mower fuel or oil spill', plan: leaf('Chemical stress','4–8 weeks, may need patching',
+        ['Fuel, oil or another chemical spilled directly on the lawn, usually while refuelling a mower.'],
+        [
+          {title:'Remove contaminated soil if the spill was significant', desc:'For a fuel spill, dig out and replace the top few centimetres of soil where it pooled.'},
+          {title:'Flush the area repeatedly', desc:'Water heavily and repeatedly over the following days to dilute what\'s left.'},
+          {title:'Patch if it doesn\'t recover', desc:'A dead patch from a fuel spill sometimes won\'t regrow on its own — a small turf patch is the fastest fix.'}
+        ],
+        ['Refuel mowers on a hard surface (driveway, path) rather than on the lawn itself.'])},
+    ]},
+    { id:'rustdust', label:'Orange dust on shoes or mower when cutting', plan: leaf('Disease','2–4 weeks',
+      ['Rust fungus — orange spore dust that rubs off on shoes, mower wheels and clothing, usually in humid, slow-growing conditions.'],
+      [
+        {title:'Mow more frequently', desc:'Rust thrives on slow-growing grass — more frequent mowing removes infected leaf tips and encourages fresh growth.'},
+        {title:'Feed lightly', desc:'A light nitrogen feed speeds up new growth, which out-competes the rust.'},
+        {title:'Fungicide if it persists', desc:'A broad-spectrum fungicide like Heritage Maxx will knock it back if mowing and feeding alone don\'t clear it.'}
+      ],
+      ['Avoid letting the lawn sit slow-growing and under-fed through humid stretches — that\'s exactly when rust takes hold.'])},
+  ]},
+
+  { id:'disease', label:'Disease (fungal)', children:[
+    { id:'rings', label:'Rings or patches of discoloured grass', children:[
+      { id:'dollarspot', label:'Small, silver-dollar sized spots', plan: leaf('Disease','2–4 weeks with treatment',
+        ['Dollar spot — small, sunken, straw-coloured circular spots, often on lawns kept a little hungry or dry.'],
+        [
+          {title:'Feed lightly', desc:'Dollar spot often shows on under-fed lawns — a light nitrogen feed helps it grow out of the spots.'},
+          {title:'Water deeply, not lightly', desc:'Switch to deep, infrequent watering rather than frequent light sprinkles, which favour the disease.'},
+          {title:'Treat with fungicide if it spreads', desc:'Heritage Maxx or Tombstone Duo will knock back an active outbreak.'}
+        ],
+        ['Keep the lawn on a regular, adequate feeding program — dollar spot is often a sign of a hungry lawn.'])},
+      { id:'brownpatch', label:'Large, expanding brown patches', plan: leaf('Disease','2–4 weeks with treatment',
+        ['Brown patch — large circular areas of dead or dying grass, expanding outward, usually in warm, humid, still weather.'],
+        [
+          {title:'Improve airflow', desc:'Reduce anything blocking air movement over the lawn if possible, and avoid watering in the evening.'},
+          {title:'Treat with a fungicide', desc:'Apply Heritage Maxx or Bumper 625, following the label rate.'},
+          {title:'Hold off on nitrogen', desc:'Lush new growth is more susceptible — avoid a heavy feed until the disease has cleared.'}
+        ],
+        ['Water early morning only, and avoid over-fertilising through humid summer stretches.'])},
+      { id:'fairyring', label:'Ring of dark green grass (or mushrooms) around a dead centre', plan: leaf('Disease','Weeks to months — persistent',
+        ['Fairy ring — fungus breaking down organic matter in the soil, showing as a ring of extra-dark or dead grass, sometimes with mushrooms.'],
+        [
+          {title:'Aerate through the ring', desc:'Core aerating through the affected band helps water penetrate the water-repellent fungal mat underneath.'},
+          {title:'Water deeply through the ring', desc:'Extra watering directly on the ring for a few weeks helps counter the dry layer the fungus creates.'},
+          {title:'Mask, don\'t chase a full cure', desc:'A light feed evens out the colour difference; fairy ring is notoriously stubborn to eliminate outright.'}
+        ],
+        ['Reduce excess thatch and buried organic debris (old stumps, timber) in the soil, which fairy ring feeds on.'])},
+      { id:'pythium', label:'Greasy or slimy patches after wet weather', plan: leaf('Disease','1–3 weeks with treatment',
+        ['Pythium (root rot) — thrives in waterlogged, humid conditions, especially overnight.'],
+        [
+          {title:'Improve drainage immediately', desc:'This disease is driven by excess moisture — reduce watering and improve drainage where possible.'},
+          {title:'Treat with a systemic fungicide', desc:'Subdue Maxx specifically targets Pythium at the root zone.'},
+          {title:'Avoid mowing wet turf', desc:'Wet mowing spreads Pythium spores across the lawn — wait until it\'s dry.'}
+        ],
+        ['Avoid overwatering, especially in already humid, poorly draining spots.'])},
+    ]},
+    { id:'slimemould', label:'Grey/black slimy or powdery coating on the leaf', plan: leaf('Disease (cosmetic)','Clears within days',
+      ['Slime mould — an organism living on the leaf surface rather than infecting the grass itself, usually after heavy rain.'],
+      [
+        {title:'Hose or brush it off', desc:'A firm spray of water, or brushing the area with a broom, physically removes it.'},
+        {title:'Mow as normal', desc:'Mowing also breaks it up and speeds up its disappearance.'},
+        {title:'Don\'t treat it as disease', desc:'It doesn\'t actually harm the grass — no fungicide is needed.'}
+      ],
+      ['Nothing to prevent — it\'s a normal, harmless response to wet conditions and clears on its own.'])},
+  ]},
+
+  { id:'pests', label:'Pests', children:[
+    { id:'armyworm', label:'Ragged, chewed leaf overnight', children:[
+      { id:'armyworm-caterpillar', label:'Caterpillars visible at dusk', plan: leaf('Pest damage','1–2 weeks with treatment',
+        ['Lawn armyworm or other caterpillars actively feeding, usually late summer into autumn.'],
+        [
+          {title:'Apply a fast knockdown insecticide', desc:'A contact insecticide like Surefire Fivestar Bifenthrin or Battle Insecticide knocks down an active infestation quickly.'},
+          {title:'Follow up with a residual', desc:'A granular like Acelepryn gives longer protection if armyworm is recurring in your area.'},
+          {title:'Feed to support recovery', desc:'Once the pest is dealt with, a light liquid feed helps the chewed area green back up.'}
+        ],
+        ['Apply a preventative granular in early summer if armyworm has hit before, before the damage starts.'])},
+      { id:'armyworm-moths', label:'Moths swarming at dusk, no caterpillars seen yet', plan: leaf('Pest — early warning','Act within days to stay ahead of it',
+        ['Adult armyworm moths laying eggs — damage usually follows within 1–2 weeks as the eggs hatch.'],
+        [
+          {title:'Watch closely over the next week', desc:'Check the lawn at dusk for early caterpillar activity, especially in the areas the moths were concentrated.'},
+          {title:'Consider a preventative granular', desc:'Applying Acelepryn GR now, before caterpillars are actively feeding, heads off the damage entirely.'},
+          {title:'Keep a knockdown spray on hand', desc:'Have Fivestar or Battle Insecticide ready so you can act fast the moment ragged leaf shows up.'}
+        ],
+        ['Moth swarms at dusk are the earliest warning sign — acting now is far easier than repairing damage after the fact.'])},
+    ]},
+    { id:'grubs', label:'Dead patches that lift like carpet', children:[
+      { id:'grubs-fewroots', label:'Little to no roots underneath', plan: leaf('Pest damage','3–6 weeks to recover',
+        ['Lawn grubs or African black beetle larvae have eaten through the root system.'],
+        [
+          {title:'Treat with a granular insecticide', desc:'Apply Acelepryn GR or Grub Guard Ultimate and water in well so it reaches the root zone.'},
+          {title:'Water and feed the damaged area', desc:'Once treated, water regularly and apply a light fertiliser to encourage new roots.'},
+          {title:'Patch badly damaged sections', desc:'Turf with no roots left won\'t recover on its own — a fresh offcut is the fastest fix for the worst spots.'}
+        ],
+        ['A preventative granular applied in early summer stops grubs before they cause visible damage.'])},
+      { id:'grubs-birds', label:'Birds or animals digging at it', plan: leaf('Pest damage','3–6 weeks to recover',
+        ['Birds, possums or bandicoots digging for grubs underneath — the digging is a symptom of a grub problem, not the cause.'],
+        [
+          {title:'Confirm grubs are present', desc:'Peel back a patch where the digging is worst — visible white grubs confirm the cause.'},
+          {title:'Treat with a granular insecticide', desc:'Acelepryn GR or Grub Guard Ultimate removes the food source, which stops the digging.'},
+          {title:'Repair the dug-up turf', desc:'Firm any lifted turf back down and water well; badly torn-up patches may need re-turfing.'}
+        ],
+        ['Treating grubs preventatively each early summer keeps both the grubs and the digging away.'])},
+    ]},
+    { id:'ants', label:'Ant mounds or nests', plan: leaf('Pest','1–2 weeks',
+      ['Ant colonies nesting in the lawn, most visible as small mounds of loose soil.'],
+      [
+        {title:'Treat the mounds directly', desc:'A granular ant killer (Fipronil-based) applied to and around active mounds is the most direct fix.'},
+        {title:'Water lightly after applying', desc:'Follow the label — a light watering after application usually helps carry the product into the nest.'},
+        {title:'Level the mounds', desc:'Once the nest is dealt with, rake the disturbed soil flat and overseed or let the lawn fill back in.'}
+      ],
+      [])},
+    { id:'mites', label:'Fine stippled, bronze or silver leaf colour', plan: leaf('Pest','2–3 weeks with treatment',
+      ['Lawn mites — a different pest to grubs or caterpillars, showing as tiny speckled discolouration rather than chewed leaf.'],
+      [
+        {title:'Confirm with a close look', desc:'Mite damage looks like fine stippling or bronzing across the leaf, not ragged chew marks.'},
+        {title:'Apply a miticide', desc:'A dedicated miticide (like ProForce Malice Duo) is needed — a standard insecticide won\'t touch mites.'},
+        {title:'Keep the lawn watered', desc:'Mite pressure is often worse on stressed, dry turf — consistent watering helps the lawn recover.'}
+      ],
+      [])},
+    { id:'diggers', label:'Circular holes dug overnight', plan: leaf('Wildlife','Ongoing until the food source is removed',
+      ['Possums, bandicoots or similar digging for grubs or worms underground.'],
+      [
+        {title:'Check for a grub problem underneath', desc:'These animals dig because there\'s food there — treating an underlying grub issue often removes the incentive.'},
+        {title:'Firm the lawn back down', desc:'Push disturbed turf back into place and water well so it re-roots.'},
+        {title:'Consider a physical deterrent', desc:'For a persistent problem, a sensor light or temporary netting over the worst-affected area can help while the food source clears.'}
+      ],
+      [])},
+  ]},
+
+  { id:'weeds', label:'Weeds', children:[
+    { id:'broadleaf', label:'Broadleaf weeds (clover, bindii, dandelion-like)', plan: leaf('Weeds','2–4 weeks',
+      ['Bare or thin patches letting weed seed germinate; a lawn that\'s thin enough for weeds to out-compete the grass.'],
+      [
+        {title:'Spray a selective broadleaf herbicide', desc:'A product like NSFW targets broadleaf weeds and leaves the lawn alone — always check your turf type is listed as safe.'},
+        {title:'Avoid mowing for a few days either side', desc:'Follow the label\'s guidance on mowing before and after spraying so the herbicide has time to work.'},
+        {title:'Thicken the lawn up afterward', desc:'A regular feeding program is the best long-term prevention — a dense lawn leaves weeds nowhere to establish.'}
+      ],
+      ['Apply a pre-emergent (Barricade, Spartan or Onset) at the start of spring and autumn to stop the next flush before it starts.'])},
+    { id:'grassyweeds', label:'Grassy weeds within the lawn', children:[
+      { id:'nutgrass', label:'Tall, glossy, triangular-stemmed weed (nutgrass)', plan: leaf('Weeds','Several weeks — persistent','Nutgrass or Mullumbimby couch, both spread by underground tubers that make them tough to fully remove.',
+        [
+          {title:'Use a specialist sedge herbicide', desc:'Standard lawn weed killers don\'t touch nutgrass — a dedicated product like ProSedge is needed.'},
+          {title:'Repeat treatment', desc:'Because it regrows from tubers, expect to need more than one application over several weeks.'},
+          {title:'Avoid disturbing the soil where it grows', desc:'Digging out nutgrass by hand often breaks off tubers and spreads it further — chemical control is more reliable.'}
+        ],
+        [])},
+      { id:'wintergrassweed', label:'Pale, clumpy weed, worse in winter', plan: leaf('Weeds','2–3 weeks',
+        ['Winter grass (Poa annua) — a light green, clumpy annual weed that germinates in cooler months.'],
+        [
+          {title:'Spot-treat with a targeted herbicide', desc:'A product like David Grays Winter Grass Killer targets it specifically.'},
+          {title:'Get ahead of it next autumn', desc:'A pre-emergent applied in early autumn stops the seed germinating before it becomes visible.'}
+        ],
+        ['An autumn pre-emergent round is the most effective long-term control for winter grass.'])},
+      { id:'crabgrassweed', label:'Coarse, spreading grass different to the lawn', plan: leaf('Weeds','2–4 weeks',
+        ['Crab grass or a similar invasive grassy weed spreading in from the edges or a thin patch.'],
+        [
+          {title:'Identify your turf type first', desc:'Some grassy-weed herbicides (like David Grays Crab Grass & Clover Killer) are couch-selective — confirm it suits your lawn before spraying.'},
+          {title:'Spot-treat the affected areas', desc:'Apply the selective herbicide directly to the weed patches, following the label rate.'},
+          {title:'Overseed or thicken the lawn afterward', desc:'Filling the gap with your actual turf variety stops the weed grass from returning.'}
+        ],
+        [])},
+    ]},
+    { id:'moss', label:'Moss or algae taking over', plan: leaf('Weeds / surface','A season to fully resolve',
+      ['Moss and algae move into thin, shaded, damp turf where grass itself is struggling.'],
+      [
+        {title:'Improve light and airflow', desc:'Prune back overhanging branches if shade is the main driver.'},
+        {title:'Improve drainage', desc:'Aerate compacted or waterlogged ground — moss thrives where grass roots can\'t.'},
+        {title:'Overseed with a shade-tolerant variety if needed', desc:'In persistently shaded spots, a more shade-tolerant turf type (zoysia, RTF fescue) will out-compete moss better than the original grass.'}
+      ],
+      ['Treating moss alone rarely works long-term — fixing the light and drainage that let it establish is what actually prevents it returning.'])},
+  ]},
+
+  { id:'water', label:'Watering issues', children:[
+    { id:'drypatch', label:'Dry, crispy patches that won\'t green up', plan: leaf('Water','2–4 weeks',
+      ['Hydrophobic (water-repellent) soil — water is running off the surface instead of soaking in, often on sandy soil.'],
+      [
+        {title:'Test it', desc:'Pour a cup of water on the dry patch — if it beads or runs off rather than soaking in, that confirms hydrophobic soil.'},
+        {title:'Apply a wetting agent', desc:'A granular (BBW) or liquid (WET) wetting agent breaks the surface tension so water can actually penetrate.'},
+        {title:'Water deeply straight after', desc:'Follow label directions and water the area well immediately after applying.'},
+        {title:'Keep watering consistently', desc:'Once wet again, keep the area from drying out completely while it recovers.'}
+      ],
+      ['A seasonal wetting agent application (spring and again in summer) stops dry patch before it starts.'])},
+    { id:'waterlogged', label:'Soggy patches, water pools', plan: leaf('Water','Ongoing, improves over a season',
+      ['Poor drainage or compacted soil, often in low spots or high-traffic areas.'],
+      [
+        {title:'Aerate the area', desc:'Core aeration (hollow-tine if possible) relieves compaction and lets water and air reach the roots.'},
+        {title:'Improve soil structure', desc:'A soil conditioner (like Escort) worked in after aerating helps break up clay and improve drainage over time.'},
+        {title:'Consider drainage for persistent low spots', desc:'If a spot floods every time it rains, it may need proper sub-surface drainage rather than just aeration.'}
+      ],
+      ['Aerate compacted or high-traffic areas once or twice a year, and avoid mowing or walking on the lawn when it\'s saturated.'])},
+    { id:'wilts', label:'Wilts by afternoon despite watering', children:[
+      { id:'wilts-footprints', label:'Footprints stay visible on the lawn', plan: leaf('Water','A few days',
+        ['Classic early drought stress — not enough water reaching the root zone.'],
+        [
+          {title:'Water more deeply', desc:'Switch to fewer, longer waterings that soak deep, rather than frequent light ones that only wet the surface.'},
+          {title:'Water earlier in the day', desc:'Morning watering gives it time to soak in before the day\'s heat.'}
+        ],
+        ['Footprints staying visible is the earliest sign of drought stress — increase watering as soon as you notice it.'])},
+      { id:'wilts-stillwilts', label:'Still wilts even after a deep water', plan: leaf('Water / soil','2–4 weeks',
+        ['Compacted soil or a thatch layer stopping water actually reaching the roots, even though plenty was applied.'],
+        [
+          {title:'Check for compaction', desc:'Push a screwdriver into the soil — if it\'s hard to push in more than a couple of centimetres, the soil is compacted.'},
+          {title:'Aerate', desc:'Core aeration opens up channels for water to actually reach the root zone.'},
+          {title:'Check thatch depth too', desc:'A thick thatch layer can shed water before it reaches the soil at all — dethatch if it\'s over about 1.5cm.'}
+        ],
+        [])},
+    ]},
+    { id:'runoff', label:'Water runs straight off instead of soaking in', plan: leaf('Water','1–2 weeks',
+      ['Hydrophobic soil, a slope shedding water too fast, or watering too hard and fast for the soil to absorb it.'],
+      [
+        {title:'Water in shorter bursts', desc:'Run the sprinkler for a shorter time, let it soak in, then repeat — this lets the soil absorb more overall than one long burst.'},
+        {title:'Apply a wetting agent on a slope or sandy soil', desc:'This is often the same hydrophobic soil issue as dry patch — a wetting agent helps it soak in rather than run off.'},
+        {title:'Check sprinkler output rate', desc:'A sprinkler applying water faster than the soil can absorb it will always run off, regardless of soil condition.'}
+      ],
+      [])},
+  ]},
+
+  { id:'newturf', label:'New turf problems', children:[
+    { id:'joins-dying', label:'Drying out or dying at the joins', plan: leaf('New turf','Act within days',
+      ['Under-watering in the critical first three weeks; gaps at the joins drying out before roots knit together.'],
+      [
+        {title:'Increase watering immediately', desc:'New turf needs daily watering (twice a day in hot weather) for the first three weeks — check you haven\'t eased off too early.'},
+        {title:'Check the joins', desc:'Push any gapped edges back together and top up with a little soil if a join has opened up and dried out.'},
+        {title:'Keep foot traffic off it', desc:'Walking on new turf before it has rooted breaks the young root connections.'},
+        {title:'Patch any dead strips', desc:'A strip that has fully died won\'t recover — replace it with a fresh offcut rather than waiting.'}
+      ],
+      ['Follow the watering schedule in the Tips tab exactly for the first month — this is the single biggest cause of new turf failure.'])},
+    { id:'notrooting', label:'Still lifts easily after 3+ weeks', plan: leaf('New turf','1–3 more weeks',
+      ['Slow rooting — can be normal for some turf types (zoysia varieties especially), or a sign of under-watering, poor soil contact, or cool weather slowing growth.'],
+      [
+        {title:'Check watering hasn\'t eased off too soon', desc:'Confirm you\'re still watering as if it\'s freshly laid until it has actually rooted, not on a fixed calendar.'},
+        {title:'Check soil contact', desc:'Lift a corner — if there\'s a gap between the turf and soil rather than roots simply not showing yet, roll it again to press it down.'},
+        {title:'Factor in turf type and season', desc:'Zoysia varieties and any turf laid in cooler weather naturally take longer to root than couch or buffalo in summer — this isn\'t always a problem.'}
+      ],
+      [])},
+    { id:'joinlines', label:'Yellow lines visible at roll or slab joins', plan: leaf('New turf','2–3 weeks',
+      ['Edge stress — the cut edges of turf rolls or slabs dry out and yellow faster than the rest of the piece.'],
+      [
+        {title:'Keep watering consistent', desc:'Edges dry out first, so make sure watering is reaching right to the joins, not just the centre of each piece.'},
+        {title:'Be patient', desc:'This is one of the most common and normal parts of new turf establishment — it typically fades as the turf knits together.'}
+      ],
+      [])},
+    { id:'gapsopening', label:'Gaps opening up between pieces', plan: leaf('New turf','Days to fix',
+      ['Shrinkage as the turf dries out slightly after laying, or pieces that weren\'t butted tightly together initially.'],
+      [
+        {title:'Push pieces back together', desc:'While still workable, gently push adjoining pieces back together to close the gap.'},
+        {title:'Top-dress any gaps that won\'t close', desc:'For gaps that can\'t be closed, a light layer of soil or sand fills the space so it doesn\'t dry out further.'},
+        {title:'Increase watering', desc:'Shrinkage often means the turf has dried out more than ideal — step up watering frequency.'}
+      ],
+      ['Butt pieces tightly together at laying time and keep watering consistent in the first weeks to avoid shrinkage.'])},
+  ]},
+
+  { id:'surface', label:'Surface & soil', children:[
+    { id:'bumpy', label:'Bumpy, uneven surface', plan: leaf('Surface','A season to fully level',
+      ['Uneven soil preparation underneath, settling over time, or old animal digging that was never levelled.'],
+      [
+        {title:'Top-dress low spots', desc:'A light layer of soil or sand spread over low areas gradually levels the surface without smothering the grass.'},
+        {title:'Roll lightly if needed', desc:'A light roller can help settle minor unevenness, but avoid rolling wet or heavily to prevent compaction.'},
+        {title:'Fix significant dips properly', desc:'For a genuinely uneven lawn, lifting the turf, adding soil underneath and relaying may be the only real fix.'}
+      ],
+      [])},
+    { id:'thatch', label:'Spongy, bounces underfoot', plan: leaf('Surface','A season to fully resolve',
+      ['Thatch build-up — a layer of dead organic matter between the soil and green leaf that\'s gotten too thick.'],
+      [
+        {title:'Confirm thatch depth', desc:'Cut a small wedge out of the lawn — more than about 1.5cm of brown, spongy material between soil and green leaf means it\'s time to dethatch.'},
+        {title:'Dethatch or scarify', desc:'Mechanically rake or scarify to pull the excess thatch out — best done at the start of the growing season.'},
+        {title:'Follow with a wetting agent and feed', desc:'A wetting agent helps water reach the soil again, and a light feed supports recovery.'},
+        {title:'Aerate if compacted too', desc:'Thatch and compaction often go together — aerating at the same time gives a better long-term result.'}
+      ],
+      ['Avoid over-fertilising, which speeds up thatch build-up, and mow regularly so clippings break down rather than accumulating.'])},
+    { id:'barepatch', label:'Bare patch that won\'t regrow', plan: leaf('Surface','2–6 weeks depending on cause',
+      ['Could be leftover damage from disease, pests, chemical burn, deep shade, or simply dead turf that needs replacing rather than repairing.'],
+      [
+        {title:'Rule out an active cause first', desc:'Check the patch isn\'t still being caused by grubs, disease or shade before treating it as just needing repair.'},
+        {title:'Loosen the soil', desc:'Lightly rake or fork the bare area to break up any crust and improve seed or turf contact.'},
+        {title:'Patch it', desc:'For runner grasses (couch, buffalo, kikuyu, zoysia) a small offcut or plugs from elsewhere in the lawn fills it fastest; for fescue, oversow with seed.'},
+        {title:'Water and protect it', desc:'Keep the new patch consistently moist and off-limits to foot traffic until it\'s knitted in.'}
+      ],
+      [])},
+    { id:'compacted', label:'Hard, compacted soil', plan: leaf('Surface','Improves over a season with regular aeration',
+      ['Repeated foot or vehicle traffic pressing the soil particles together, squeezing out the air and water space roots need.'],
+      [
+        {title:'Aerate', desc:'Core aeration (hollow-tine ideally) is the direct fix — do it at the start of the growing season for fastest recovery.'},
+        {title:'Top-dress with a soil conditioner', desc:'Working a conditioner like Escort into the aerated holes helps improve structure longer-term.'},
+        {title:'Reduce traffic on the worst spots if possible', desc:'A stepping-stone path or rotating where kids/pets play helps avoid re-compacting the same area.'}
+      ],
+      ['Aerate high-traffic areas once or twice a year as routine maintenance rather than waiting for problems to show.'])},
+  ]},
+
+  { id:'wear', label:'Wear & traffic', children:[
+    { id:'pathtrack', label:'Worn track or path across the lawn', plan: leaf('Wear','A season to recover, longer if traffic continues',
+      ['Repeated foot traffic along the same line wearing the grass down faster than it can recover.'],
+      [
+        {title:'Redirect traffic if possible', desc:'A stepping-stone path along the worn line takes the pressure off the grass and looks intentional.'},
+        {title:'Overseed or patch the worst of it', desc:'For runner grasses, feeding and reduced traffic often lets it fill back in on its own; badly worn tracks may need patching.'},
+        {title:'Aerate the area', desc:'Worn paths are often compacted too — aerating helps the grass recover faster.'}
+      ],
+      [])},
+    { id:'dogholes', label:'Dog urine spots or digging', children:[
+      { id:'dog-urine', label:'Burnt, yellow-brown circular spots', plan: leaf('Other','2–4 weeks',
+        ['Concentrated nitrogen in dog urine scorching the grass at the point of contact.'],
+        [
+          {title:'Flush fresh spots', desc:'Hose down a spot as soon as you notice it to dilute the nitrogen before it burns.'},
+          {title:'Trim dead growth', desc:'Once a spot has browned off, trim away the dead leaf so new growth isn\'t competing for light.'},
+          {title:'Feed and water the spot', desc:'A light liquid feed plus consistent watering helps the surrounding grass grow back into the bare patch.'},
+          {title:'Patch badly burnt spots', desc:'For a spot that won\'t recover on its own, a small turf patch or runners from elsewhere in the lawn will fill it fastest.'}
+        ],
+        ['Train pets to a mulched or gravel toilet spot, or flush likely areas with water as a habit.'])},
+      { id:'dog-digging', label:'Actual holes being dug', plan: leaf('Wildlife / pets','Days, once addressed',
+        ['Boredom or instinct digging, or the dog chasing grubs or insects it can smell underground.'],
+        [
+          {title:'Rule out a grub problem', desc:'If the digging targets specific spots repeatedly, check underneath for grubs — treating them may remove the incentive.'},
+          {title:'Fill and firm the holes', desc:'Pack soil back into the holes and firm it down, then water and oversow or patch as needed.'},
+          {title:'Redirect the behaviour if it\'s boredom', desc:'A designated digging spot (sandpit or mulched area) can redirect instinctive digging away from the lawn.'}
+        ],
+        [])},
+    ]},
+    { id:'ruttracks', label:'Ruts from a vehicle, trailer or wheelbarrow', plan: leaf('Wear','2–4 weeks',
+      ['Weight concentrated on narrow wheels compressing and tearing the turf, especially on soft ground.'],
+      [
+        {title:'Avoid repeating the same path', desc:'Stop driving or wheeling over the same line while it recovers.'},
+        {title:'Firm and level the ruts', desc:'Press the turf back into place by hand, top-dress any depression, and water well.'},
+        {title:'Aerate the compacted line', desc:'The soil under a rut is usually compacted as well as torn — aerate once it\'s levelled.'}
+      ],
+      ['Use plywood sheets or planks to spread the load if you need to drive or wheel heavy loads across the lawn again.'])},
+  ]},
+
+  { id:'seasonal', label:'Seasonal changes', children:[
+    { id:'dormancy', label:'Warm-season lawn gone brown in winter', plan: leaf('Normal / seasonal','Greens up again in spring',
+      ['Normal winter dormancy — buffalo, couch, kikuyu and most zoysia varieties slow down or brown off in the cold and green back up on their own once it warms up.'],
+      [
+        {title:'Don\'t panic-feed or panic-water', desc:'A dormant lawn doesn\'t need heavy fertiliser — it can\'t use it while it\'s not actively growing, and it just sits in the soil or washes away.'},
+        {title:'Reduce mowing', desc:'Growth has slowed right down — mowing less often is normal and expected through winter.'},
+        {title:'Resume the normal program in spring', desc:'As soil temperatures rise, the lawn will green up on its own — that\'s the time to resume feeding and mowing as usual.'}
+      ],
+      [])},
+    { id:'summerstress', label:'Cool-season or fescue lawn struggling in summer', plan: leaf('Seasonal stress','Ongoing through the hot stretch',
+      ['Cool-season turf like RTF fescue naturally struggles once temperatures climb — heat and drought stress, not disease or a mowing mistake.'],
+      [
+        {title:'Raise the mowing height', desc:'A taller cut (towards 50mm) shades the soil and crown, reducing heat stress.'},
+        {title:'Water deeply through the hottest stretch', desc:'Cool-season turf has a genuinely higher water requirement than warm-season grass — don\'t try to run it as lean.'},
+        {title:'Avoid heavy nitrogen feeds in summer heat', desc:'Push feeding to spring and autumn instead, when the grass can actually use it.'}
+      ],
+      ['If summer stress is a recurring, serious problem, it may be worth considering a warm-season variety better suited to your climate.'])},
+    { id:'frostdamage', label:'White or blackened leaf tips after a cold snap', plan: leaf('Seasonal / frost','Grows out over a few weeks',
+      ['Frost damage — ice forming in the leaf tissue overnight and rupturing cells, most visible on the exposed tips.'],
+      [
+        {title:'Leave it alone', desc:'Don\'t mow frost-damaged grass while it\'s still frozen — wait until it has fully thawed.'},
+        {title:'Let it grow out', desc:'The damaged tips will be removed naturally at the next mow once the frost risk has passed.'},
+        {title:'Protect vulnerable new turf next time', desc:'A breathable frost cover (TurfRise) over new or especially sensitive turf on forecast cold nights prevents most of this damage.'}
+      ],
+      [])},
+  ]},
+];
+
+const PRODUCTS = [
+  {id:'lh-trojan', brand:'LawnHub', featured:true, name:'Trojan Lawn Fertiliser 25:0:10+2.5%Fe 5kg', category:'Fertiliser', rate:'2.5 kg per 100 m² · slow release, feeds up to 12 weeks', blurb:'Custom-blended, professional-quality slow-release fertiliser — the flagship LawnHub feed.', def:true,
+    schedule:{type:'daysAfterLay', days:42, interval:84, occurrences:5}, calc:{mode:'weight', amt:2.5, unit:'kg', per:100}},
+  {id:'lh-premature', brand:'LawnHub', featured:true, name:'Premature 20:0:16+6% Winter Lawn Fertiliser 5kg', category:'Fertiliser', rate:'Once yearly, early winter', blurb:'A winter-formulated feed with extra potassium to harden turf off before the cold, when growth slows right down.', def:false,
+    schedule:{type:'seasonal', months:[5]}},
+  {id:'lh-minipill', brand:'LawnHub', featured:true, name:'Mini Pill 150SGN Fine Lawn Fertiliser 5kg', category:'Fertiliser', rate:'Controlled release · fine prill for tightly-mown lawns', blurb:'A finer, more even prill than Trojan — suited to lawns kept short, where a coarse granule would show.', def:false,
+    schedule:{type:'daysAfterLay', days:42, interval:84, occurrences:5}},
+  {id:'lh-gotlaid', brand:'LawnHub', featured:true, name:'Got Laid Starter Fertiliser 19:11:10 5kg', category:'Starter', rate:'2.5 kg per 100 m² · reapply every 8 weeks while establishing', blurb:'LawnHub\'s starter blend — gets new roots off to a strong start, raked into the prepared soil right before laying.', def:true,
+    schedule:{type:'onLayDay'}, calc:{mode:'weight', amt:2.5, unit:'kg', per:100}},
+  {id:'lh-rootsnshoots', brand:'LawnHub', featured:true, name:'Roots N Shoots Lawn Fertiliser 1L', category:'Fertiliser', rate:'Via pressure sprayer · foliar, root-development focus', blurb:'A liquid feed built around root development — a good regular pick through establishment and into the first growing season.', def:true,
+    schedule:{type:'daysAfterLay', days:14, interval:21, occurrences:6}},
+  {id:'lh-moneyshot', brand:'LawnHub', featured:true, name:'Money Shot Lawn Fertiliser 1L', category:'Fertiliser', rate:'Via pressure sprayer · foliar greener', blurb:'A premium liquid greener for a fast colour lift — foliar feeding absorbs straight through the leaf.', def:false,
+    schedule:{type:'daysAfterLay', days:21, interval:21, occurrences:8}},
+  {id:'lh-threeway', brand:'LawnHub', featured:true, name:'Threeway Lawn Fertiliser 15:4:8+Trace Elements 1L', category:'Fertiliser', rate:'Via pressure sprayer · balanced liquid feed with trace elements', blurb:'A balanced N-P-K liquid with trace elements, good as a general-purpose top-up between granular feeds.', def:false,
+    schedule:{type:'daysAfterLay', days:28, interval:28, occurrences:6}},
+  {id:'lh-bbw', brand:'LawnHub', featured:true, name:'BBW Granular Wetting Agent 3kg', category:'Wetting', rate:'1.5 kg per 100 m² · lasts up to 12 weeks, no need to water in', blurb:'A granular wetting agent for lawns that repel water or dry out in patches through the warmer months.', def:true,
+    schedule:{type:'seasonal', months:[9,12,3]}, calc:{mode:'weight', amt:1.5, unit:'kg', per:100}},
+  {id:'lh-wet', brand:'LawnHub', featured:true, name:'WET Liquid Soil Wetting Agent 1L', category:'Wetting', rate:'250–500 mL in 5–10 L water per 100 m² · lasts ~3 months', blurb:'Liquid surfactant that helps water reach the root zone instead of running off the surface.', def:false,
+    schedule:{type:'seasonal', months:[10,2]}, calc:{mode:'dilution', prodAmt:250, prodUnit:'mL', waterAmt:5, waterUnit:'L', per:100}},
+  {id:'lh-hydroforce', brand:'LawnHub', featured:true, name:'Indigo HydroForce Rapid Soil Penetrant 1L', category:'Wetting', rate:'Via pressure sprayer · fast-acting penetrant', blurb:'Moves water deeper into the root zone fast — handy right before a hot spell or on compacted soil.', def:false,
+    schedule:{type:'seasonal', months:[11]}},
+  {id:'lh-escort', brand:'LawnHub', featured:true, name:'Escort Soil Conditioner 1L', category:'Soil', rate:'Every 6–8 weeks through the growing season', blurb:'A soil conditioner that improves structure and drainage, useful on compacted or clay-heavy soils.', def:false,
+    schedule:{type:'daysAfterLay', days:30, interval:45, occurrences:6}},
+  {id:'lh-nsfw', brand:'LawnHub', featured:true, name:'NSFW Broadleaf Herbicide 500mL', category:'Weed', rate:'Spray across the whole lawn · safe on all lawns incl. Buffalo', blurb:'Targets broadleaf weeds and leaves the lawn alone — spray, the weeds die back over the following days and grass fills the gaps.', def:false,
+    schedule:{type:'seasonal', months:[9,3]}},
+  {id:'lh-barricade', brand:'LawnHub', featured:true, name:'Barricade Pre-Emergent Herbicide 1L', category:'Weed', rate:'Early spring & early autumn · established lawns only', blurb:'Forms a barrier in the soil that stops summer and winter weed seeds germinating before they start.', def:false,
+    schedule:{type:'seasonal', months:[9,3]}},
+  {id:'lh-spartan', brand:'LawnHub', featured:true, name:'Spartan Pre-Emergent Herbicide 500mL', category:'Weed', rate:'Early spring & early autumn · alternative pre-emergent', blurb:'A second pre-emergent option worth rotating in — using the same actives season after season can let resistant weeds through.', def:false,
+    schedule:{type:'seasonal', months:[9,3]}},
+  {id:'lh-onset', brand:'LawnHub', featured:true, name:'Onset 10 GR Pre-Emergent Herbicide 5kg', category:'Weed', rate:'Granular pre-emergent · early spring & early autumn', blurb:'A granular pre-emergent for anyone who prefers to spread rather than spray.', def:false,
+    schedule:{type:'seasonal', months:[9,3]}},
+  {id:'lh-monument', brand:'LawnHub', featured:true, name:'Monument Herbicide 100mL', category:'Weed', rate:'Spot-spray as needed', blurb:'Broad-spectrum selective post-emergence herbicide for unwanted grassy weeds like nutgrass and winter grass within the lawn.', def:false,
+    schedule:{type:'seasonal', months:[10]}},
+  {id:'lh-crabgrass', brand:'LawnHub', featured:true, name:'David Grays Crab Grass & Clover Killer 500mL', category:'Weed', rate:'Couch-selective · check label before use on other turf', blurb:'Targets crab grass and clover — labelled as a couch-selective herbicide, so confirm it suits your turf before spraying.', def:false,
+    schedule:{type:'seasonal', months:[11]}},
+  {id:'lh-wintergrass', brand:'LawnHub', featured:true, name:'David Grays Winter Grass Killer', category:'Weed', rate:'Winter · spot-treat as it appears', blurb:'Targets winter grass (Poa annua), the pale clumpy weed that turns up in cooler months.', def:false,
+    schedule:{type:'seasonal', months:[6]}},
+  {id:'lh-prosedge', brand:'LawnHub', featured:true, name:'ProForce ProSedge 750DF 25gm', category:'Weed', rate:'For nutgrass & Mullumbimby couch', blurb:'A specialist sedge herbicide for nutgrass and Mullumbimby couch — persistent weeds regular selective herbicides won\'t touch.', def:false,
+    schedule:{type:'seasonal', months:[11]}},
+  {id:'lh-duke', brand:'LawnHub', featured:true, name:'ProForce Duke 100WG 50gm Selective Herbicide', category:'Weed', rate:'Spot-spray as needed', blurb:'A professional-grade selective herbicide for tougher weed pressure, check the label for weeds and turf types covered.', def:false,
+    schedule:{type:'seasonal', months:[10]}},
+  {id:'lh-poachek', brand:'LawnHub', featured:true, name:'Poachek Post Emergent Herbicide 1L', category:'Weed', rate:'Spot-spray as needed', blurb:'A post-emergent herbicide option for problem grassy weeds already established in the lawn.', def:false,
+    schedule:{type:'seasonal', months:[10]}},
+  {id:'lh-nominee', brand:'LawnHub', featured:true, name:'Nominee Herbicide 500mL', category:'Weed', rate:'Spot-spray as needed', blurb:'Another post-emergent selective option worth having on hand for rotating actives.', def:false,
+    schedule:{type:'seasonal', months:[10]}},
+  {id:'lh-acelepryn', brand:'LawnHub', featured:true, name:'Acelepryn (Granular or Liquid)', category:'Pest', rate:'Once yearly, early summer · preventative', blurb:'Residual protection against African black beetle, lawn grubs and lawn armyworm caterpillars, applied before damage shows — available as granular GR or liquid.', def:false,
+    schedule:{type:'seasonal', months:[11]}},
+  {id:'lh-antkiller', brand:'LawnHub', featured:true, name:'Granular Ant Killer (Fipronil) 500gm', category:'Pest', rate:'Spot-treat ant mounds as needed', blurb:'Targets ant nests and mounds turning up in the lawn — a different problem to grubs or caterpillars.', def:false,
+    schedule:{type:'seasonal', months:[10]}},
+  {id:'lh-fivestar', brand:'LawnHub', featured:true, name:'Surefire Fivestar Bifenthrin 1L Insecticide', category:'Pest', rate:'Fast knockdown spray · at first sign of damage', blurb:'A broad-spectrum contact insecticide for fast knockdown of surface pests, including armyworm caterpillars, the moment you spot chewed leaf blades.', def:false,
+    schedule:{type:'seasonal', months:[3]}},
+  {id:'lh-tirem', brand:'LawnHub', featured:true, name:'Tirem 200 Systemic Insecticide 1L', category:'Pest', rate:'Systemic · longer residual control', blurb:'Taken up into the plant for longer-lasting pest control than a straight contact spray.', def:false,
+    schedule:{type:'seasonal', months:[11]}},
+  {id:'lh-malice', brand:'LawnHub', featured:true, name:'ProForce Malice Duo Miticide 1L', category:'Pest', rate:'For lawn mites, not grubs', blurb:'A miticide for lawn mites specifically — a different pest again, showing as fine stippled bronzing rather than chewed leaf.', def:false,
+    schedule:{type:'seasonal', months:[1]}},
+  {id:'lh-heritagemaxx', brand:'LawnHub', featured:true, name:'Heritage Maxx Fungicide 1L', category:'Fungicide', rate:'Treat only if symptoms appear · humid weather', blurb:'Broad-spectrum fungicide for brown patch and other fungal disease showing as rings or patches in humid summer stretches.', def:false,
+    schedule:{type:'seasonal', months:[1]}},
+  {id:'lh-subduemaxx', brand:'LawnHub', featured:true, name:'Subdue Maxx Fungicide 1L', category:'Fungicide', rate:'Treat only if symptoms appear · cool, wet conditions', blurb:'Systemic fungicide that targets Pythium and root-zone disease, most common in cool, damp conditions.', def:false,
+    schedule:{type:'seasonal', months:[4]}},
+  {id:'lh-tombstone', brand:'LawnHub', featured:true, name:'Tombstone Duo Fungicide 100mL', category:'Fungicide', rate:'Treat only if symptoms appear', blurb:'Another broad-spectrum option worth rotating with Heritage Maxx or Bumper.', def:false,
+    schedule:{type:'seasonal', months:[2]}},
+  {id:'lh-impala', brand:'LawnHub', featured:true, name:'Impala Fungicide 250mL', category:'Fungicide', rate:'Treat only if symptoms appear', blurb:'A further fungicide option for disease pressure through the warmer, humid months.', def:false,
+    schedule:{type:'seasonal', months:[3]}},
+  {id:'lh-bumper', brand:'LawnHub', featured:true, name:'Bumper 625 Fungicide 1L', category:'Fungicide', rate:'Treat only if symptoms appear', blurb:'A broad-spectrum fungicide for general disease pressure, useful to rotate with other actives.', def:false,
+    schedule:{type:'seasonal', months:[1]}},
+  {id:'lh-primomaxx', brand:'LawnHub', featured:true, name:'Primo Maxx II Turf Growth Regulator 5L', category:'PGR', rate:'Every 3–4 weeks through the growing season · established lawns', blurb:'Professional-grade PGR that slows vertical leaf growth and redirects energy into density and root mass. Also sold as Primo HG 500mL for smaller lawns.', def:false,
+    schedule:{type:'daysAfterLay', days:110, interval:24, occurrences:6}},
+  {id:'lh-trimmit', brand:'LawnHub', featured:true, name:'Trimmit Growth Regulator 100mL', category:'PGR', rate:'Twice yearly · edges & aprons', blurb:'A lighter-touch growth regulator, handy for slowing growth along garden bed edges and turf aprons.', def:false,
+    schedule:{type:'seasonal', months:[10,2]}},
+  {id:'lh-astro', brand:'LawnHub', featured:true, name:'Astro 120 ME Growth Regulator 1L', category:'PGR', rate:'Every 4 weeks through the growing season · established lawns', blurb:'An alternative PGR active, another option for reducing mowing frequency on a fully established lawn.', def:false,
+    schedule:{type:'daysAfterLay', days:110, interval:28, occurrences:5}},
+  {id:'lh-turfrise', brand:'LawnHub', featured:true, name:'TurfRise Growth Cover', category:'Gear', rate:'Keep on hand for frosty nights or slow patches', blurb:'A breathable cover that lifts soil temperature to speed up germination and protect new turf from frost.', def:false, schedule:{type:'none'}},
+  {id:'lh-soiltest', brand:'LawnHub', featured:true, name:'Soil Test', category:'Gear', rate:'Send off once, before you guess with fertiliser', blurb:'Lab analysis of your soil so you know exactly what it needs, rather than fertilising blind.', def:false, schedule:{type:'none'}},
+  {id:'lh-trublue', brand:'LawnHub', featured:true, name:'Tru-Blue Spray Indicator 1L', category:'Gear', rate:'Add to any tank mix', blurb:'A dye additive that shows exactly where you\'ve already sprayed, so nothing gets missed or double-dosed.', def:false, schedule:{type:'none'}},
+
+  {id:'lsa-launcher', brand:'Lawn Solutions Australia', name:'Lawn Launcher Starter Fertiliser', category:'Starter', rate:'Worked into the soil before or at turf-down', blurb:'An alternative starter fertiliser blended with water crystals, raked into the soil for new roots.', def:false,
+    schedule:{type:'onLayDay'}},
+  {id:'lsa-premium', brand:'Lawn Solutions Australia', name:'Premium Fertiliser', category:'Fertiliser', rate:'Quarterly · Sep / Dec / Mar / May', blurb:'Sir Walter-developed fertiliser recommended year-round across all turf varieties, including zoysia.', def:false,
+    schedule:{type:'seasonal', months:[9,12,3,5]}},
+  {id:'lsa-battle', brand:'Lawn Solutions Australia', name:'Battle Insecticide & Termiticide 1L', category:'Pest', rate:'Knockdown spray · at first sign of damage', blurb:'Powerful knockdown and residual pesticide for African black beetle and lawn armyworm — reach for this the moment you spot chewed, ragged leaf blades.', def:false,
+    schedule:{type:'seasonal', months:[3]}},
+  {id:'lsa-ironguard', brand:'Lawn Solutions Australia', name:'Iron Guard Plus', category:'Soil', rate:'Every 30 days through the growing season', blurb:'Turf-enhancing bio-stimulant with iron and amino acids for a fast boost in colour and turf strength.', def:false,
+    schedule:{type:'daysAfterLay', days:30, interval:30, occurrences:8}},
+  {id:'scotts-builder', brand:'Scotts', name:'Lawn Builder + Wetting Agent', category:'Fertiliser', rate:'16 g per m² · feeds for 3 months', blurb:'Slow-release fertiliser with a built-in wetting agent and a no-scorch formula.', def:false,
+    schedule:{type:'daysAfterLay', days:42, interval:90, occurrences:5}, calc:{mode:'weight', amt:16, unit:'g', per:1}},
+  {id:'seasol', brand:'Seasol', name:'Seaweed Tonic', category:'Soil', rate:'Monthly soil drench', blurb:'Seaweed-based tonic that supports root development and eases establishment stress.', def:true,
+    schedule:{type:'daysAfterLay', days:14, interval:30, occurrences:10}},
+  {id:'fungicheck', brand:'General', name:'Fungal Disease Check', category:'Fungicide', rate:'Inspect during humid weather · treat only if needed', blurb:'A prompt to walk the lawn for brown patch or fungal rings — only treat with a fungicide if symptoms actually show.', def:false,
+    schedule:{type:'seasonal', months:[1]}},
+];
+
+const CAT_LABEL = {Fertiliser:'Fertiliser', Wetting:'Wetting agent', Weed:'Weed control', Pest:'Pest control', Fungicide:'Fungicide', Soil:'Soil conditioner', Starter:'Starter fertiliser', PGR:'Growth regulator', Gear:'Gear & reference'};
+const CAT_ORDER = ['Starter','Fertiliser','Wetting','Soil','Weed','Pest','Fungicide','PGR','Gear'];
+
+const SCHEMES = [
+  {id:'green-lime', label:'Dark green & lime', sw:['#0A1A0E','#C6FA3C']},
+  {id:'black-orange', label:'Black & orange', sw:['#0A0A0A','#FF7A1A']},
+  {id:'charcoal-sky', label:'Charcoal & sky', sw:['#10161C','#5FD4E8']},
+  {id:'forest-gold', label:'Forest & gold', sw:['#0E1A0C','#E8B44C']},
+  {id:'clay-cream', label:'Clay & cream (light)', sw:['#FBF6ED','#B5622A']},
+];
+
+/* ================= STORAGE ================= */
+const LS_KEY = 'lawnwhisperer_v1';
+function loadState(){ try{ const raw = localStorage.getItem(LS_KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
+function saveState(s){ try{ localStorage.setItem(LS_KEY, JSON.stringify(s)); }catch(e){} }
+function defaultState(){
+  return {
+    layDate:null, turfType:null, lawnStatus:'new', selected:[], done:{}, custom:[], savedPlans:[],
+    calc:{ productId:'custom', mode:'weight', areas:[{name:'Front yard', turf:'', m2:''}],
+      weight:{amt:'',unit:'kg',per:''}, dilution:{prodAmt:'',prodUnit:'mL',waterAmt:'',waterUnit:'L',per:''} },
+    settings:{ calendarLink:'', hemisphere:'south', reminderLeadDays:1, scheme:'green-lime' }
+  };
+}
+let state = loadState() || defaultState();
+if(!state.calc) state.calc = defaultState().calc;
+if(!state.settings) state.settings = defaultState().settings;
+if(state.calc.productId===undefined) state.calc.productId='custom';
+if(!state.lawnStatus) state.lawnStatus = 'new';
+if(!state.savedPlans) state.savedPlans = [];
+
+/* ================= DATE HELPERS ================= */
+function addDays(date, n){ const d = new Date(date); d.setDate(d.getDate()+n); return d; }
+function parseYMD(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+function toYMD(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function toYYYYMMDD(d){ return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0'); }
+function startOfDay(d){ const c=new Date(d); c.setHours(0,0,0,0); return c; }
+function daysBetween(a,b){ return Math.round((startOfDay(b)-startOfDay(a))/86400000); }
+const MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function nextMonthDate(after, month1to12){
+  let y = after.getFullYear(); let d = new Date(y, month1to12-1, 1);
+  if(d < startOfDay(after)) d = new Date(y+1, month1to12-1, 1);
+  return d;
+}
+function shiftMonth(m){
+  if(state.settings.hemisphere!=='north') return m;
+  return ((m-1+6)%12)+1;
+}
+
+/* ================= SEASONAL OUTLOOK ================= */
+const SEASON_MONTHS = {spring:9, summer:12, autumn:3, winter:6}; // Southern-Hemisphere month the season starts; shiftMonth() adjusts for Northern
+const SEASON_PREP = {
+  spring:{ title:'Spring is coming — get ahead of it', items:[
+    'Apply a pre-emergent herbicide before summer weed seeds germinate.',
+    'Plan your first big feed of the season as the soil starts warming up.',
+    'Check for dry, hydrophobic patches and line up a wetting agent before the heat arrives.',
+    'Start easing mowing frequency up as growth picks up.'
+  ]},
+  summer:{ title:'Summer is coming — get ahead of it', items:[
+    'Watch for lawn armyworm and fungal disease through humid, still stretches.',
+    'Shift to deep, infrequent watering rather than short daily bursts.',
+    'Raise the mower height slightly to protect roots from heat stress.',
+    'Keep an eye out for early drought stress — footprints staying visible is the first sign.'
+  ]},
+  autumn:{ title:'Autumn is coming — get ahead of it', items:[
+    'Line up a second pre-emergent round for winter weeds like winter grass.',
+    'Start easing off nitrogen as growth slows heading into the cooler months.',
+    'A light iron application now holds colour without pushing excess growth.',
+    'Aerate if the lawn took heavy traffic over summer.'
+  ]},
+  winter:{ title:'Winter is coming — get ahead of it', items:[
+    'Expect growth to slow right down — mowing less often is normal from here.',
+    'Hold off on heavy fertiliser until spring; the lawn can\'t use it while dormant.',
+    'Spot-treat winter weeds like winter grass and clover as they appear.',
+    'For warm-season turf, don\'t panic if it browns off — that\'s dormancy, not damage.'
+  ]}
+};
+function seasonalOutlookEvents(startDate){
+  return Object.keys(SEASON_MONTHS).map(season=>{
+    const monthShifted = shiftMonth(SEASON_MONTHS[season]);
+    const seasonStart = nextMonthDate(startDate, monthShifted);
+    let remindDate = addDays(seasonStart, -14);
+    if(remindDate < startOfDay(startDate)) remindDate = new Date(startDate);
+    const prep = SEASON_PREP[season];
+    return { date: remindDate, title: prep.title, category:'Seasonal', note:'A heads-up to prepare before the season turns:', checklist: prep.items };
+  });
+}
+
+/* ================= SCHEDULE ENGINE ================= */
+function expandProduct(p, startDate, lawnStatus){
+  const rule = p.schedule; const dates = [];
+  if(rule.type==='none'){ return []; }
+  if(rule.type==='onLayDay'){
+    if(lawnStatus==='established') return []; // starter products only apply to new turf
+    dates.push(new Date(startDate));
+  }
+  else if(rule.type==='daysAfterLay'){
+    const initialDays = lawnStatus==='established' ? Math.min(rule.days, 14) : rule.days;
+    let d = addDays(startDate, initialDays); const occ = rule.occurrences || 1;
+    for(let i=0;i<occ;i++){ dates.push(new Date(d)); if(rule.interval) d = addDays(d, rule.interval); else break; }
+  } else if(rule.type==='seasonal'){ rule.months.forEach(m=> dates.push(nextMonthDate(startDate, shiftMonth(m)))); }
+  return dates.map(date=>({ date, title:p.name, category:p.category, note:p.blurb+(p.rate?' · '+p.rate:''), brand:p.brand }));
+}
+function fixedTasks(startDate, turfType, lawnStatus){
+  if(lawnStatus==='established'){
+    return [
+      {date:new Date(startDate), title:'Plan started', category:'Milestone', note:'Your maintenance plan begins today — everything below is scheduled from here on its normal cycle.'}
+    ];
+  }
+  return [
+    {date:new Date(startDate), title:'Lay turf & water in', category:'Milestone', note:'Water immediately and thoroughly once the turf is down — this activates any starter fertiliser and stops the new grass drying out.'},
+    {date:new Date(startDate), title:'Begin daily watering', category:'Watering', note:'Water once or twice a day (more in hot weather) to keep turf and soil underneath consistently moist for the first three weeks.'},
+    {date:addDays(startDate,21), title:'Ease off watering', category:'Watering', note:'Drop back to watering every 2–3 days now the turf has knitted down into the soil.'},
+    {date:addDays(startDate, turfType.firstMow), title:'First mow', category:'Mowing', note:'Tug a corner to check it has rooted before mowing. Set the mower high and never take off more than a third of the leaf blade.'},
+  ];
+}
+function customTasksAsEvents(customList){
+  const out = [];
+  customList.forEach(c=>{
+    const base = parseYMD(c.date); const repeat = Number(c.repeat)||0;
+    if(!repeat){ out.push({date:base, title:c.title, category:'Custom', note:'Added by you.', customId:c.id}); }
+    else{
+      const occ = repeat>=365?3:4; let d=new Date(base);
+      for(let i=0;i<occ;i++){ out.push({date:new Date(d), title:c.title, category:'Custom', note:'Added by you.', customId:c.id}); d = addDays(d, repeat); }
+    }
+  });
+  return out;
+}
+function buildEvents(){
+  if(!state.layDate || !state.turfType) return [];
+  const startDate = parseYMD(state.layDate);
+  const turfType = TURF_TYPES.find(t=>t.id===state.turfType);
+  const lawnStatus = state.lawnStatus || 'new';
+  let events = fixedTasks(startDate, turfType, lawnStatus);
+  state.selected.forEach(id=>{ const p = PRODUCTS.find(pp=>pp.id===id); if(p) events = events.concat(expandProduct(p, startDate, lawnStatus)); });
+  events = events.concat(customTasksAsEvents(state.custom));
+  events = events.concat(seasonalOutlookEvents(startDate));
+  events.sort((a,b)=>a.date-b.date);
+  events.forEach(e=>{ e.key = e.title+'|'+toYMD(e.date); e.done = !!state.done[e.key]; });
+  return events;
+}
+
+/* ================= CALENDAR EXPORT ================= */
+function gcalLink(ev){
+  const start = toYYYYMMDD(ev.date); const end = toYYYYMMDD(addDays(ev.date,1));
+  const params = new URLSearchParams({ action:'TEMPLATE', text:ev.title, dates: start+'/'+end, details: ev.note || '' });
+  return 'https://calendar.google.com/calendar/render?'+params.toString();
+}
+function escapeICS(s){ return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); }
+function buildICS(events){
+  const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//The Lawn Whisperer//EN','CALSCALE:GREGORIAN'];
+  const stamp = toYYYYMMDD(new Date())+'T000000Z';
+  const lead = Number(state.settings.reminderLeadDays)||0;
+  events.forEach((ev,i)=>{
+    const start = toYYYYMMDD(ev.date); const end = toYYYYMMDD(addDays(ev.date,1));
+    lines.push('BEGIN:VEVENT'); lines.push('UID:lawnwhisperer-'+i+'-'+start+'@lawnwhisperer'); lines.push('DTSTAMP:'+stamp);
+    lines.push('DTSTART;VALUE=DATE:'+start); lines.push('DTEND;VALUE=DATE:'+end);
+    lines.push('SUMMARY:'+escapeICS(ev.title)); lines.push('DESCRIPTION:'+escapeICS(ev.note||''));
+    lines.push('BEGIN:VALARM'); lines.push('ACTION:DISPLAY'); lines.push('DESCRIPTION:Reminder'); lines.push('TRIGGER:-P'+lead+'D'); lines.push('END:VALARM');
+    lines.push('END:VEVENT');
+  });
+  lines.push('END:VCALENDAR'); return lines.join('\r\n');
+}
+async function exportICS(){
+  const events = buildEvents();
+  if(events.length===0){ showToast('Nothing to export yet'); return false; }
+  const ics = buildICS(events);
+  try{
+    const downloads = await claude.use('downloads');
+    if(downloads){ await downloads.save({filename:'lawn-whisperer.ics', data:ics}); return true; }
+  }catch(e){}
+  try{
+    const blob = new Blob([ics], {type:'text/calendar'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'lawn-whisperer.ics';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    return true;
+  }catch(e){ showToast('Could not export'); return false; }
+}
+
+/* ================= RENDER: shared ================= */
+function showToast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1800); }
+function renderTurfSelect(){
+  const sel = document.getElementById('turfType');
+  sel.innerHTML = TURF_TYPES.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  if(state.turfType) sel.value = state.turfType;
+}
+function groupByCategory(list){
+  const map = {}; list.forEach(p=>{ (map[p.category]=map[p.category]||[]).push(p); });
+  return CAT_ORDER.filter(c=>map[c]).map(cat=>({cat, items:map[cat]}));
+}
+function renderProductList(){
+  const wrap = document.getElementById('productList');
+  const visible = state.lawnStatus==='established' ? PRODUCTS.filter(p=>p.category!=='Starter') : PRODUCTS;
+  const featured = visible.filter(p=>p.featured);
+  const others = visible.filter(p=>!p.featured);
+  let html = `<div class="brand-heading"><span class="dot"></span>LawnHub — full range</div>`;
+  groupByCategory(featured).forEach(g=>{
+    const openAttr = (g.cat==='Starter'||g.cat==='Fertiliser') ? ' open' : '';
+    html += `<details class="catgroup"${openAttr}><summary>${CAT_LABEL[g.cat]||g.cat} (${g.items.length})</summary><div class="catbody">${g.items.map(productRow).join('')}</div></details>`;
+  });
+  html += `<div class="brand-heading"><span class="dot"></span>Also worth having</div>`;
+  groupByCategory(others).forEach(g=>{
+    html += `<details class="catgroup"><summary>${CAT_LABEL[g.cat]||g.cat} (${g.items.length})</summary><div class="catbody">${g.items.map(productRow).join('')}</div></details>`;
+  });
+  wrap.innerHTML = html;
+  wrap.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const id = cb.dataset.id;
+      if(cb.checked){ if(!state.selected.includes(id)) state.selected.push(id); }
+      else { state.selected = state.selected.filter(x=>x!==id); }
+      saveState(state);
+    });
+  });
+}
+function productRow(p){
+  const checked = state.selected.includes(p.id) ? 'checked' : '';
+  return `<div class="product">
+    <div class="check"><input type="checkbox" data-id="${p.id}" ${checked}></div>
+    <div class="body">
+      <div class="top-row"><span class="pname">${p.name}</span><span class="badge brandtag">${p.brand}</span></div>
+      <div class="rate">${p.rate}</div>
+      <div class="blurb">${p.blurb}</div>
+    </div>
+  </div>`;
+}
+function relLabel(ev){
+  const today = startOfDay(new Date()); const diff = daysBetween(today, ev.date);
+  if(ev.done) return {text:'Done', cls:''};
+  if(diff===0) return {text:'Today', cls:''};
+  if(diff===1) return {text:'Tomorrow', cls:''};
+  if(diff>1) return {text:'In '+diff+' days', cls:''};
+  return {text:Math.abs(diff)+' days overdue', cls:'overdue'};
+}
+function renderSchedule(){
+  const events = buildEvents(); const ledger = document.getElementById('ledger');
+  const section = document.getElementById('scheduleSection'); const upload = document.getElementById('uploadSection');
+  if(!state.layDate){ section.classList.add('hidden'); upload.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  upload.classList.toggle('hidden', events.length===0);
+  document.getElementById('noCalLinkNote').classList.toggle('hidden', !!state.settings.calendarLink);
+  if(events.length===0){ ledger.innerHTML = `<div class="empty">No products selected yet. Tick a few above and generate again.</div>`; return; }
+  const groups = {};
+  events.forEach(ev=>{ const key = ev.date.getFullYear()+'-'+ev.date.getMonth(); (groups[key]=groups[key]||[]).push(ev); });
+  let html='';
+  Object.keys(groups).forEach(key=>{
+    const list = groups[key]; const sample = list[0].date;
+    html += `<div class="month-group"><h4>${MONTH_NAMES[sample.getMonth()]} ${sample.getFullYear()}</h4>`;
+    list.forEach(ev=>{
+      const rel = relLabel(ev);
+      const checklistHtml = ev.checklist ? `<ul style="padding-left:18px; margin:6px 0 0; font-size:12.5px; color:var(--chalk-dim); line-height:1.55;">${ev.checklist.map(c=>`<li style="margin:3px 0;">${c}</li>`).join('')}</ul>` : '';
+      html += `<div class="task ${ev.done?'done':''}">
+        <input type="checkbox" data-key="${encodeURIComponent(ev.key)}" ${ev.done?'checked':''}>
+        <div class="datebadge"><div class="d">${ev.date.getDate()}</div><div class="m">${MONTH_NAMES[ev.date.getMonth()]}</div></div>
+        <div class="content">
+          <div class="trow"><span class="ttitle">${ev.title}</span><span class="tag ${ev.category}">${CAT_LABEL[ev.category]||ev.category}</span></div>
+          ${ev.note?`<div class="tnote">${ev.note}</div>`:''}
+          ${checklistHtml}
+          <div class="trel ${rel.cls}">${rel.text}</div>
+          <div class="tactions"><a href="${gcalLink(ev)}" target="_blank" rel="noopener">+ Google Calendar</a></div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  ledger.innerHTML = html;
+  ledger.querySelectorAll('input[type=checkbox][data-key]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const key = decodeURIComponent(cb.dataset.key);
+      if(cb.checked) state.done[key]=true; else delete state.done[key];
+      saveState(state); renderSchedule();
+    });
+  });
+}
+function setLawnStatus(status, skipSave){
+  state.lawnStatus = status;
+  if(!skipSave) saveState(state);
+  document.getElementById('statusNewBtn').classList.toggle('active', status==='new');
+  document.getElementById('statusEstablishedBtn').classList.toggle('active', status==='established');
+  document.getElementById('layDateLabel').textContent = status==='established' ? 'Plan start date' : 'Date turf is laid';
+  if(status==='established' && !document.getElementById('layDate').value){
+    const t = toYMD(new Date());
+    document.getElementById('layDate').value = t;
+  }
+}
+function renderHeroAndSummary(){
+  const hasPlan = !!(state.layDate && state.turfType);
+  document.getElementById('setupHero').classList.toggle('hidden', hasPlan);
+  document.getElementById('setupCard').classList.toggle('hidden', hasPlan);
+  document.getElementById('summaryHero').classList.toggle('hidden', !hasPlan);
+  document.getElementById('libSection').classList.toggle('hidden', !hasPlan);
+  if(!hasPlan) return;
+  const startDate = parseYMD(state.layDate); const turfType = TURF_TYPES.find(t=>t.id===state.turfType);
+  const today = startOfDay(new Date()); const dayNum = daysBetween(startDate, today);
+  const established = state.lawnStatus==='established';
+  document.getElementById('dayCounter').textContent = dayNum<0 ? '—' : dayNum;
+  const verb = established ? 'since the plan started' : 'since turf went down';
+  document.getElementById('summaryLine1').innerHTML = dayNum<0
+    ? (established ? `Plan starts in <b>${Math.abs(dayNum)} days</b>` : `Turf goes down in <b>${Math.abs(dayNum)} days</b>`)
+    : `<b>Day ${dayNum}</b> ${verb}`;
+  document.getElementById('summaryLine2').textContent = (turfType ? turfType.name : '') + (established ? ' · established lawn' : ' · new lawn');
+}
+function renderSavedPlans(){
+  const card = document.getElementById('savedPlansCard'); const list = document.getElementById('savedPlansList');
+  if(!state.savedPlans || state.savedPlans.length===0){ card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  list.innerHTML = state.savedPlans.map(sp=>{
+    const t = TURF_TYPES.find(x=>x.id===sp.turfType);
+    return `<div class="savedplan">
+      <div><div class="spname">${sp.name}</div><div class="spmeta">${t?t.name:'—'} · ${sp.lawnStatus==='established'?'Established':'New lawn'} · saved ${sp.savedAt}</div></div>
+      <div class="spactions"><button class="load" data-load="${sp.id}">Load</button><button class="del" data-del="${sp.id}">Delete</button></div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('[data-load]').forEach(btn=>btn.addEventListener('click', ()=>loadPlan(btn.dataset.load)));
+  list.querySelectorAll('[data-del]').forEach(btn=>btn.addEventListener('click', ()=>deletePlan(btn.dataset.del)));
+}
+function loadPlan(id){
+  const sp = state.savedPlans.find(x=>x.id===id); if(!sp) return;
+  state.layDate = sp.layDate; state.turfType = sp.turfType; state.lawnStatus = sp.lawnStatus||'new';
+  state.selected = [...sp.selected]; state.done = {...sp.done}; state.custom = JSON.parse(JSON.stringify(sp.custom||[]));
+  saveState(state);
+  document.getElementById('layDate').value = state.layDate;
+  document.getElementById('turfType').value = state.turfType;
+  setLawnStatus(state.lawnStatus, true);
+  renderAll();
+  showTab('plan'); window.scrollTo({top:0});
+  showToast('Loaded "'+sp.name+'"');
+}
+function deletePlan(id){
+  if(!confirm('Delete this saved plan? This can\'t be undone.')) return;
+  state.savedPlans = state.savedPlans.filter(x=>x.id!==id);
+  saveState(state); renderSavedPlans();
+}
+function renderAll(){ renderHeroAndSummary(); renderProductList(); renderSchedule(); renderSavedPlans(); }
+
+/* ================= PLAN EVENTS ================= */
+document.getElementById('statusNewBtn').addEventListener('click', ()=>setLawnStatus('new'));
+document.getElementById('statusEstablishedBtn').addEventListener('click', ()=>setLawnStatus('established'));
+
+document.getElementById('saveSetupBtn').addEventListener('click', ()=>{
+  const dateVal = document.getElementById('layDate').value; const turfVal = document.getElementById('turfType').value;
+  if(!dateVal){ showToast(state.lawnStatus==='established' ? 'Pick a plan start date first' : 'Pick a turf-down date first'); return; }
+  state.layDate = dateVal; state.turfType = turfVal;
+  if(state.selected.length===0){
+    state.selected = PRODUCTS.filter(p=>p.def && !(state.lawnStatus==='established' && p.category==='Starter')).map(p=>p.id);
+  }
+  saveState(state); renderAll();
+  document.getElementById('libSection').scrollIntoView({behavior:'smooth', block:'start'});
+});
+document.getElementById('editSetupBtn').addEventListener('click', ()=>{
+  document.getElementById('setupHero').classList.remove('hidden');
+  document.getElementById('setupCard').classList.remove('hidden');
+  document.getElementById('summaryHero').classList.add('hidden');
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+document.getElementById('savePlanBtn').addEventListener('click', ()=>{
+  if(!state.layDate){ showToast('Nothing to save yet'); return; }
+  const t = TURF_TYPES.find(x=>x.id===state.turfType);
+  const typed = document.getElementById('savePlanName').value.trim();
+  const name = typed || (t ? t.name : 'My lawn') + ' plan';
+  state.savedPlans.push({
+    id:'p'+Date.now(), name, savedAt: toYMD(new Date()),
+    layDate: state.layDate, turfType: state.turfType, lawnStatus: state.lawnStatus,
+    selected:[...state.selected], done:{...state.done}, custom: JSON.parse(JSON.stringify(state.custom))
+  });
+  saveState(state);
+  document.getElementById('savePlanName').value = '';
+  renderSavedPlans();
+  showToast('Plan saved');
+});
+document.getElementById('startNewBtn').addEventListener('click', ()=>{
+  if(!confirm('Start a new plan? Save this one first with "Save plan" if you want to keep it — starting new clears the current turf setup, product picks and schedule progress.')) return;
+  state.layDate = null; state.turfType = null; state.lawnStatus = 'new';
+  state.selected = []; state.done = {}; state.custom = [];
+  saveState(state);
+  document.getElementById('layDate').value = '';
+  document.getElementById('turfType').selectedIndex = 0;
+  setLawnStatus('new', true);
+  renderAll();
+  window.scrollTo({top:0, behavior:'smooth'});
+  showToast('Ready for a new plan');
+});
+document.getElementById('generateBtn').addEventListener('click', ()=>{
+  if(!state.layDate){ showToast('Set your start date first'); return; }
+  saveState(state); renderSchedule();
+  document.getElementById('scheduleSection').scrollIntoView({behavior:'smooth', block:'start'});
+  showToast('Schedule updated');
+});
+document.getElementById('addCustomToggle').addEventListener('click', ()=>{ document.getElementById('addForm').classList.toggle('open'); });
+document.getElementById('customAddBtn').addEventListener('click', ()=>{
+  const title = document.getElementById('customTitle').value.trim();
+  const date = document.getElementById('customDate').value;
+  const repeat = document.getElementById('customRepeat').value;
+  if(!title || !date){ showToast('Add a title and a date'); return; }
+  state.custom.push({id:'c'+Date.now(), title, date, repeat});
+  saveState(state);
+  document.getElementById('customTitle').value=''; document.getElementById('customDate').value='';
+  document.getElementById('addForm').classList.remove('open');
+  renderSchedule(); showToast('Reminder added');
+});
+document.getElementById('uploadBtn').addEventListener('click', async ()=>{
+  const ok = await exportICS();
+  if(!ok) return;
+  showToast('Calendar file ready');
+  if(state.settings.calendarLink){
+    setTimeout(()=>window.open(state.settings.calendarLink, '_blank'), 600);
+  }
+});
+
+/* ================= TABS ================= */
+function showTab(name){
+  document.getElementById('planView').classList.toggle('hidden', name!=='plan');
+  document.getElementById('calcView').classList.toggle('hidden', name!=='calc');
+  document.getElementById('tipsView').classList.toggle('hidden', name!=='tips');
+  document.getElementById('hospitalView').classList.toggle('hidden', name!=='hospital');
+  document.getElementById('settingsView').classList.toggle('hidden', name!=='settings');
+  document.getElementById('tabPlan').classList.toggle('active', name==='plan');
+  document.getElementById('tabCalc').classList.toggle('active', name==='calc');
+  document.getElementById('tabTips').classList.toggle('active', name==='tips');
+  document.getElementById('tabHospital').classList.toggle('active', name==='hospital');
+  document.getElementById('tabSettings').classList.toggle('active', name==='settings');
+  window.scrollTo({top:0});
+}
+document.getElementById('tabPlan').addEventListener('click', ()=>showTab('plan'));
+document.getElementById('tabCalc').addEventListener('click', ()=>showTab('calc'));
+document.getElementById('tabTips').addEventListener('click', ()=>showTab('tips'));
+document.getElementById('tabHospital').addEventListener('click', ()=>showTab('hospital'));
+document.getElementById('tabSettings').addEventListener('click', ()=>showTab('settings'));
+
+/* ================= HOSPITAL ================= */
+function renderPrimarySelect(){
+  const sel = document.getElementById('hospPrimary');
+  sel.innerHTML = HOSPITAL.map(n=>`<option value="${n.id}">${n.label}</option>`).join('');
+  sel.addEventListener('change', ()=>onHospPrimaryChange());
+}
+function onHospPrimaryChange(){
+  const node = HOSPITAL.find(n=>n.id===document.getElementById('hospPrimary').value);
+  fillLevel('hospSecondaryWrap','hospSecondary', node ? node.children : null);
+  fillLevel('hospTertiaryWrap','hospTertiary', null);
+  document.getElementById('issueCard').classList.add('hidden');
+  if(node && node.plan) renderPlanCard(node);
+}
+function onHospSecondaryChange(){
+  const primary = HOSPITAL.find(n=>n.id===document.getElementById('hospPrimary').value);
+  const node = primary && primary.children.find(n=>n.id===document.getElementById('hospSecondary').value);
+  if(node && node.children){
+    fillLevel('hospTertiaryWrap','hospTertiary', node.children);
+    document.getElementById('issueCard').classList.add('hidden');
+  } else {
+    fillLevel('hospTertiaryWrap','hospTertiary', null);
+    if(node && node.plan) renderPlanCard(node);
+  }
+}
+function onHospTertiaryChange(){
+  const primary = HOSPITAL.find(n=>n.id===document.getElementById('hospPrimary').value);
+  const secondary = primary && primary.children.find(n=>n.id===document.getElementById('hospSecondary').value);
+  const node = secondary && secondary.children && secondary.children.find(n=>n.id===document.getElementById('hospTertiary').value);
+  if(node && node.plan) renderPlanCard(node);
+}
+function fillLevel(wrapId, selectId, nodes){
+  const wrap = document.getElementById(wrapId); const sel = document.getElementById(selectId);
+  if(!nodes || nodes.length===0){ wrap.classList.add('hidden'); sel.innerHTML=''; return; }
+  sel.innerHTML = nodes.map(n=>`<option value="${n.id}">${n.label}</option>`).join('');
+  wrap.classList.remove('hidden');
+}
+function renderPlanCard(node){
+  const p = node.plan;
+  const card = document.getElementById('issueCard');
+  card.classList.remove('hidden');
+  card.innerHTML = `
+    <h3 style="margin-top:0; font-size:18px;">${node.label}</h3>
+    <div class="issue-meta"><span>${p.tag}</span><span>${p.timeframe}</span></div>
+    ${p.causes && p.causes.length ? `
+    <h5 style="color:var(--lime); font-size:11.5px; text-transform:uppercase; letter-spacing:0.6px; margin:14px 0 6px;">Likely cause</h5>
+    <ul style="padding-left:18px; font-size:13.5px; color:var(--chalk-dim); line-height:1.6; margin:0 0 4px;">${p.causes.map(c=>`<li style="margin:4px 0;">${c}</li>`).join('')}</ul>` : ''}
+    <h5 style="color:var(--lime); font-size:11.5px; text-transform:uppercase; letter-spacing:0.6px; margin:16px 0 2px;">Repair plan</h5>
+    <ul class="steplist">${p.steps.map(s=>`<li><b>${s.title}</b>${s.desc}</li>`).join('')}</ul>
+    ${p.prevention && p.prevention.length ? `
+    <h5 style="color:var(--lime); font-size:11.5px; text-transform:uppercase; letter-spacing:0.6px; margin:6px 0 6px;">Next time</h5>
+    <ul style="padding-left:18px; font-size:13.5px; color:var(--chalk-dim); line-height:1.6; margin:0;">${p.prevention.map(pr=>`<li style="margin:4px 0;">${pr}</li>`).join('')}</ul>` : ''}
+  `;
+  card.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+document.getElementById('hospSecondary').addEventListener('change', onHospSecondaryChange);
+document.getElementById('hospTertiary').addEventListener('change', onHospTertiaryChange);
+
+
+/* ================= TIPS ================= */
+function renderTurfTipsSelect(){
+  const sel = document.getElementById('tipsTurfSelect');
+  sel.innerHTML = TURF_TYPES.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  sel.value = state.turfType || 'zoysia-australis';
+  sel.addEventListener('change', ()=>renderTurfTipsCard(sel.value));
+}
+function renderTurfTipsCard(turfId){
+  const t = TURF_TYPES.find(x=>x.id===turfId); const tips = TURF_TIPS[turfId];
+  const card = document.getElementById('turfTipsCard');
+  card.innerHTML = `
+    <h3 style="margin-top:0; font-size:18px;">${t.name}</h3>
+    <ul style="padding-left:18px; font-size:13.5px; color:var(--chalk-dim); line-height:1.6; margin:10px 0 16px;">
+      ${tips.profile.map(p=>`<li style="margin:5px 0;">${p}</li>`).join('')}
+    </ul>
+    <div class="doscol">
+      <h5>Do</h5>
+      <ul style="padding-left:18px; font-size:13.5px; color:var(--chalk-dim); line-height:1.6;">${tips.dos.map(d=>`<li style="margin:5px 0;">${d}</li>`).join('')}</ul>
+    </div>
+    <div class="doscol donts">
+      <h5>Don't</h5>
+      <ul style="padding-left:18px; font-size:13.5px; color:var(--chalk-dim); line-height:1.6;">${tips.donts.map(d=>`<li style="margin:5px 0;">${d}</li>`).join('')}</ul>
+    </div>
+  `;
+}
+
+/* ================= SETTINGS ================= */
+function applyScheme(id){
+  document.documentElement.setAttribute('data-scheme', id);
+  document.querySelectorAll('.schemebtn').forEach(b=>b.classList.toggle('active', b.dataset.scheme===id));
+}
+function renderSchemeGrid(){
+  const grid = document.getElementById('schemeGrid');
+  grid.innerHTML = SCHEMES.map(s=>`
+    <button type="button" class="schemebtn ${state.settings.scheme===s.id?'active':''}" data-scheme="${s.id}">
+      <div class="swatch"><span class="sw" style="background:${s.sw[0]}; border:1px solid #0003;"></span><span class="sw" style="background:${s.sw[1]};"></span></div>
+      <div class="lbl">${s.label}</div>
+    </button>
+  `).join('');
+  grid.querySelectorAll('.schemebtn').forEach(btn=>btn.addEventListener('click', ()=>{
+    state.settings.scheme = btn.dataset.scheme; saveState(state); applyScheme(btn.dataset.scheme);
+  }));
+}
+document.getElementById('calendarLinkInput').addEventListener('input', e=>{ state.settings.calendarLink = e.target.value.trim(); saveState(state); renderSchedule(); });
+document.getElementById('hemiSouthBtn').addEventListener('click', ()=>setHemisphere('south'));
+document.getElementById('hemiNorthBtn').addEventListener('click', ()=>setHemisphere('north'));
+function setHemisphere(h){
+  state.settings.hemisphere = h; saveState(state);
+  document.getElementById('hemiSouthBtn').classList.toggle('active', h==='south');
+  document.getElementById('hemiNorthBtn').classList.toggle('active', h==='north');
+  renderSchedule();
+}
+document.getElementById('leadTimeSelect').addEventListener('change', e=>{ state.settings.reminderLeadDays = e.target.value; saveState(state); });
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  if(!confirm('Clear all Lawn Whisperer data from this device, including saved plans? This can\'t be undone.')) return;
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  state = defaultState(); saveState(state);
+  document.getElementById('layDate').value = '';
+  document.getElementById('turfType').selectedIndex = 0;
+  setLawnStatus('new', true);
+  applyScheme(state.settings.scheme);
+  renderAll(); renderAreaRows(); renderCalcProductSelect(); onCalcProductChange();
+  document.getElementById('calendarLinkInput').value=''; setHemisphere('south'); document.getElementById('leadTimeSelect').value='1';
+  showToast('All data cleared');
+  showTab('plan');
+});
+
+/* ================= CALCULATOR ================= */
+function renderAreaRows(){
+  const wrap = document.getElementById('areaRows');
+  wrap.innerHTML = state.calc.areas.map((a,i)=>`
+    <div class="arearow" data-idx="${i}">
+      ${state.calc.areas.length>1?`<button class="rm" data-rm="${i}" type="button">Remove</button>`:''}
+      <label class="field">Zone name</label>
+      <input type="text" class="area-name" data-idx="${i}" placeholder="e.g. Front yard" value="${a.name||''}">
+      <div class="row2">
+        <div><label class="field">Turf type</label>
+          <select class="area-turf" data-idx="${i}">
+            <option value="">Not specified</option>
+            ${TURF_TYPES.map(t=>`<option value="${t.id}" ${a.turf===t.id?'selected':''}>${t.name}</option>`).join('')}
+          </select>
+        </div>
+        <div><label class="field">Area (m²)</label>
+          <input type="number" min="0" step="any" class="area-m2" data-idx="${i}" placeholder="120" value="${a.m2||''}">
+        </div>
+      </div>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.area-name').forEach(el=>el.addEventListener('input', e=>{ state.calc.areas[+e.target.dataset.idx].name = e.target.value; saveState(state); }));
+  wrap.querySelectorAll('.area-turf').forEach(el=>el.addEventListener('change', e=>{ state.calc.areas[+e.target.dataset.idx].turf = e.target.value; saveState(state); }));
+  wrap.querySelectorAll('.area-m2').forEach(el=>el.addEventListener('input', e=>{ state.calc.areas[+e.target.dataset.idx].m2 = e.target.value; saveState(state); }));
+  wrap.querySelectorAll('[data-rm]').forEach(btn=>btn.addEventListener('click', e=>{
+    state.calc.areas.splice(+e.target.dataset.rm,1); saveState(state); renderAreaRows();
+  }));
+  document.getElementById('addAreaBtn').style.opacity = state.calc.areas.length>=4 ? '0.4' : '1';
+}
+document.getElementById('addAreaBtn').addEventListener('click', ()=>{
+  if(state.calc.areas.length>=4){ showToast('Up to 4 zones'); return; }
+  state.calc.areas.push({name:'', turf:'', m2:''}); saveState(state); renderAreaRows();
+});
+
+function renderCalcProductSelect(){
+  const sel = document.getElementById('calcProductSelect');
+  let html = `<option value="custom">Custom / other product</option>`;
+  groupByCategory(PRODUCTS).forEach(g=>{
+    html += `<optgroup label="${CAT_LABEL[g.cat]||g.cat}">`;
+    g.items.forEach(p=>{ html += `<option value="${p.id}">${p.brand} — ${p.name}</option>`; });
+    html += `</optgroup>`;
+  });
+  sel.innerHTML = html;
+  sel.value = state.calc.productId || 'custom';
+  sel.addEventListener('change', ()=>{ state.calc.productId = sel.value; saveState(state); onCalcProductChange(); });
+}
+function onCalcProductChange(){
+  const id = state.calc.productId || 'custom';
+  const note = document.getElementById('calcRateNote');
+  const modeSection = document.getElementById('modeSection');
+  if(id==='custom'){
+    note.textContent = 'Enter the rate straight off the product label.';
+    modeSection.classList.remove('hidden');
+    return;
+  }
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p){ return; }
+  if(p.calc){
+    setCalcMode(p.calc.mode, true);
+    modeSection.classList.add('hidden');
+    if(p.calc.mode==='weight'){
+      document.getElementById('wAmt').value = p.calc.amt; document.getElementById('wUnit').value = p.calc.unit; document.getElementById('wPer').value = p.calc.per;
+      state.calc.weight = {amt:p.calc.amt, unit:p.calc.unit, per:p.calc.per};
+    } else {
+      document.getElementById('dProdAmt').value = p.calc.prodAmt; document.getElementById('dProdUnit').value = p.calc.prodUnit;
+      document.getElementById('dWaterAmt').value = p.calc.waterAmt; document.getElementById('dWaterUnit').value = p.calc.waterUnit; document.getElementById('dPer').value = p.calc.per;
+      state.calc.dilution = {prodAmt:p.calc.prodAmt, prodUnit:p.calc.prodUnit, waterAmt:p.calc.waterAmt, waterUnit:p.calc.waterUnit, per:p.calc.per};
+    }
+    note.textContent = 'Rate from the ' + p.name + ' label — adjust below if yours differs.';
+    saveState(state);
+  } else {
+    modeSection.classList.remove('hidden');
+    note.textContent = 'No verified rate on file yet for ' + p.name + ' — check the label and enter the numbers below.';
+  }
+}
+
+function setCalcMode(mode, silent){
+  state.calc.mode = mode; if(!silent) saveState(state);
+  document.getElementById('modeWeightBtn').classList.toggle('active', mode==='weight');
+  document.getElementById('modeDilutionBtn').classList.toggle('active', mode==='dilution');
+  document.getElementById('weightFields').classList.toggle('hidden', mode!=='weight');
+  document.getElementById('dilutionFields').classList.toggle('hidden', mode!=='dilution');
+}
+document.getElementById('modeWeightBtn').addEventListener('click', ()=>{ state.calc.productId='custom'; document.getElementById('calcProductSelect').value='custom'; onCalcProductChange(); setCalcMode('weight'); });
+document.getElementById('modeDilutionBtn').addEventListener('click', ()=>{ state.calc.productId='custom'; document.getElementById('calcProductSelect').value='custom'; onCalcProductChange(); setCalcMode('dilution'); });
+
+function toGrams(amt,unit){ return unit==='kg' ? amt*1000 : amt; }
+function toML(amt,unit){ return unit==='L' ? amt*1000 : amt; }
+function fmtWeight(g){ if(g>=1000) return (g/1000).toFixed(2).replace(/0$/,'').replace(/\.$/,'')+' kg'; return Math.round(g*100)/100+' g'; }
+function fmtVol(ml){ if(ml>=1000) return (ml/1000).toFixed(2).replace(/0$/,'').replace(/\.$/,'')+' L'; return Math.round(ml*100)/100+' mL'; }
+
+['wAmt','wUnit','wPer'].forEach(id=>document.getElementById(id).addEventListener('input', ()=>{
+  state.calc.weight = { amt:document.getElementById('wAmt').value, unit:document.getElementById('wUnit').value, per:document.getElementById('wPer').value };
+  saveState(state);
+}));
+['dProdAmt','dProdUnit','dWaterAmt','dWaterUnit','dPer'].forEach(id=>document.getElementById(id).addEventListener('input', ()=>{
+  state.calc.dilution = { prodAmt:document.getElementById('dProdAmt').value, prodUnit:document.getElementById('dProdUnit').value,
+    waterAmt:document.getElementById('dWaterAmt').value, waterUnit:document.getElementById('dWaterUnit').value, per:document.getElementById('dPer').value };
+  saveState(state);
+}));
+
+document.getElementById('calcBtn').addEventListener('click', ()=>{
+  const areas = state.calc.areas.filter(a=>Number(a.m2)>0);
+  if(areas.length===0){ showToast('Enter at least one zone with an area'); return; }
+  const results = document.getElementById('calcResults');
+  let rows = ''; let totalProd = 0; let totalWater = 0;
+  const selId = state.calc.productId; const selProduct = selId && selId!=='custom' ? PRODUCTS.find(x=>x.id===selId) : null;
+  const heading = selProduct ? selProduct.name : 'Result';
+
+  if(state.calc.mode==='weight'){
+    const amt = Number(state.calc.weight.amt), unit = state.calc.weight.unit, per = Number(state.calc.weight.per);
+    if(!amt || !per){ showToast('Fill in the rate first'); return; }
+    const isVol = (unit==='L'||unit==='mL');
+    const perM2 = (isVol ? toML(amt,unit) : toGrams(amt,unit)) / per;
+    areas.forEach(a=>{
+      const m2 = Number(a.m2); const needed = perM2*m2; totalProd += needed;
+      const turfName = a.turf ? (TURF_TYPES.find(t=>t.id===a.turf)||{}).name : '—';
+      rows += `<tr><td>${a.name||'Zone'}</td><td>${turfName||'—'}</td><td>${m2} m²</td><td>${isVol?fmtVol(needed):fmtWeight(needed)}</td></tr>`;
+    });
+    results.innerHTML = `<h3 style="margin-top:0;">${heading}</h3>
+      <table class="results-table"><tr><th>Zone</th><th>Turf</th><th>Area</th><th>Product needed</th></tr>${rows}
+      <tr class="totalrow"><td colspan="3">Total across ${areas.length} zone${areas.length>1?'s':''}</td><td>${isVol?fmtVol(totalProd):fmtWeight(totalProd)}</td></tr></table>`;
+  } else {
+    const prodAmt = Number(state.calc.dilution.prodAmt), prodUnit = state.calc.dilution.prodUnit;
+    const waterAmt = Number(state.calc.dilution.waterAmt), waterUnit = state.calc.dilution.waterUnit;
+    const per = Number(state.calc.dilution.per);
+    if(!prodAmt || !waterAmt || !per){ showToast('Fill in the rate first'); return; }
+    const prodPerM2 = toML(prodAmt,prodUnit)/per; const waterPerM2 = toML(waterAmt,waterUnit)/per;
+    areas.forEach(a=>{
+      const m2 = Number(a.m2); const prod = prodPerM2*m2; const water = waterPerM2*m2;
+      totalProd += prod; totalWater += water;
+      const turfName = a.turf ? (TURF_TYPES.find(t=>t.id===a.turf)||{}).name : '—';
+      rows += `<tr><td>${a.name||'Zone'}</td><td>${turfName||'—'}</td><td>${m2} m²</td><td>${fmtVol(prod)}</td><td>${fmtVol(water)}</td></tr>`;
+    });
+    results.innerHTML = `<h3 style="margin-top:0;">${heading}</h3>
+      <table class="results-table"><tr><th>Zone</th><th>Turf</th><th>Area</th><th>Product</th><th>Water</th></tr>${rows}
+      <tr class="totalrow"><td colspan="3">Total across ${areas.length} zone${areas.length>1?'s':''}</td><td>${fmtVol(totalProd)}</td><td>${fmtVol(totalWater)}</td></tr></table>
+      <p style="font-size:12.5px; color:var(--chalk-dim); margin-top:10px;">Total spray mix to make up: <b style="color:var(--chalk);">${fmtVol(totalProd+totalWater)}</b></p>`;
+  }
+  results.classList.remove('hidden');
+  results.scrollIntoView({behavior:'smooth', block:'nearest'});
+});
+
+/* ================= INIT ================= */
+applyScheme(state.settings.scheme);
+renderTurfSelect();
+setLawnStatus(state.lawnStatus||'new', true);
+if(state.layDate) document.getElementById('layDate').value = state.layDate;
+if(state.turfType) document.getElementById('turfType').value = state.turfType;
+document.getElementById('customDate').addEventListener('focus', function(){ if(!this.value) this.value = toYMD(new Date()); });
+renderAll();
+renderAreaRows();
+renderCalcProductSelect();
+document.getElementById('wAmt').value = state.calc.weight.amt||''; document.getElementById('wUnit').value = state.calc.weight.unit||'kg'; document.getElementById('wPer').value = state.calc.weight.per||'';
+document.getElementById('dProdAmt').value = state.calc.dilution.prodAmt||''; document.getElementById('dProdUnit').value = state.calc.dilution.prodUnit||'mL';
+document.getElementById('dWaterAmt').value = state.calc.dilution.waterAmt||''; document.getElementById('dWaterUnit').value = state.calc.dilution.waterUnit||'L'; document.getElementById('dPer').value = state.calc.dilution.per||'';
+setCalcMode(state.calc.mode||'weight', true);
+onCalcProductChange();
+renderTurfTipsSelect();
+renderTurfTipsCard(state.turfType || 'zoysia-australis');
+renderPrimarySelect();
+onHospPrimaryChange();
+document.getElementById('calendarLinkInput').value = state.settings.calendarLink||'';
+setHemisphere(state.settings.hemisphere||'south');
+document.getElementById('leadTimeSelect').value = state.settings.reminderLeadDays!==undefined ? String(state.settings.reminderLeadDays) : '1';
+renderSchemeGrid();
+</script>
+</body>
+</html>
